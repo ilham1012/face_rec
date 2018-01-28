@@ -29,6 +29,9 @@ from doorlock.styles import init_style
 
 
 class App(tk.Tk):
+    output_pin = 12
+    buzzer_pin = 18
+
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.on_jetson = False
@@ -87,10 +90,6 @@ class App(tk.Tk):
 
     def show_frame(self, screen_class):
         screen = self.screens[screen_class]
-            
-        if(screen_class == "result"):
-            print(screen)
-            
         screen.tkraise()
         screen.update()
         screen.show_screen()
@@ -98,14 +97,14 @@ class App(tk.Tk):
     def on_close(self):
         self.video_stream.stop()
         print("[INFO] Close App")
-        # GPIO.cleanup()
+        GPIO.cleanup()
         self.quit()
 
     def GPIO_init(self):
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(self.buzzer_pin, GPIO.OUT, initial=0)
-        # GPIO.setup(self.output_pin, GPIO.OUT, initial=GPIO.LOW)
-        pass
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(self.buzzer_pin, GPIO.OUT, initial=GPIO.HIGH)
+        GPIO.setup(self.output_pin, GPIO.OUT, initial=GPIO.LOW)
+        # pass
 
 
 app = App()

@@ -58,18 +58,37 @@ class HomeScreen(tk.Frame):
         print("[BELL] RIIIIING!")
         # sound_file = ASSETS_URL + 'sounds/doorbell.mp3'
         # system("mpg123 " + sound_file)
-        i = 0
-        pitch = [82, 65]
-        duration = [0.2, 0.4]
+        
+#        i = 0
+#        pitch = [82, 0, 65]
+#        duration = [1, 0.1, 2]
 
-        for p in pitch:
-            self.buzzer(p, duration[i])
-            time.sleep(duration[i] * 0.5)
-            x+=1
+#        for p in pitch:
+#            self.buzzer(p, duration[i])
+#            time.sleep(duration[i] * 0.5)
+#            i+=1
+
+        self.app.GPIO.output(self.buzzer_pin, 0)
+        time.sleep(0.4)
+        self.app.GPIO.output(self.buzzer_pin, 1)
+        time.sleep(0.1)
+        self.app.GPIO.output(self.buzzer_pin, 0)
+        time.sleep(0.1)
+        self.app.GPIO.output(self.buzzer_pin, 1)
+        time.sleep(0.1)
+        self.app.GPIO.output(self.buzzer_pin, 0)
+        time.sleep(0.1)
+        self.app.GPIO.output(self.buzzer_pin, 1)
+        time.sleep(0.1)
+        self.app.GPIO.output(self.buzzer_pin, 0)
+        time.sleep(0.4)
+        self.app.GPIO.output(self.buzzer_pin, 1)
+        
 
     buzzer_pin = 18
     # from http://andidinata.com/2017/10/music-dengan-piezo-buzzer/
     def buzzer(self, pitch, duration):
+        print("p: ", pitch, " - ", duration)
         if(pitch==0):
             time.sleep(duration)
             return

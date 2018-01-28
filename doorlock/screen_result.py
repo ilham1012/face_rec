@@ -11,14 +11,14 @@ from doorlock.constants import ASSETS_URL
 from doorlock.styles import colors
 
 class ResultScreen(tk.Frame):
-    output_pin = 18
+    output_pin = 12
 
     def __init__(self, parent, app):
         tk.Frame.__init__(self, parent)
 
         self['bg'] = colors['navy']
 
-        self.GPIO_init()
+#        self.GPIO_init()
 
         self.title_up_txt = tk.StringVar()
         self.title_down_txt = tk.StringVar()
@@ -47,7 +47,7 @@ class ResultScreen(tk.Frame):
 
     def show_screen(self):
         print("[SHOW SCREEN] Result")
-        # if (self.name != "unknown"):
+#         if (self.name != "unknown"):
             # self.GPIO_init()
             # try:
             #     print("GPIO.HIGH")
@@ -59,7 +59,14 @@ class ResultScreen(tk.Frame):
             # finally:
             #     GPIO.cleanup()
         # else:
-        time.sleep(2)
+
+        if (self.name != "unknown"):
+            self.app.GPIO.output(self.output_pin, 1)        
+            time.sleep(3)
+            self.app.GPIO.output(self.output_pin, 0)
+        else:
+            time.sleep(2)
+
         self.reset()
         self.app.show_frame("home")
 
