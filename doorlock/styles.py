@@ -19,7 +19,7 @@ def init_style():
     #                     foreground=color_grey_light)
 
     style.configure('TButton',
-                        font=('Arial', 12, 'bold'),
+                        font=('PT Sans Caption', 12, 'bold'),
                         padding=12,
                         background=colors['white_broken'],
                         foreground=colors['grey_dark'],
@@ -30,7 +30,7 @@ def init_style():
                         background=[('active', colors['grey_light']), ('pressed', colors['grey_mid'])])
 
     style.configure('P.TButton',
-                        font=('Arial', 12, 'bold'),
+                        font=('PT Sans Caption', 12, 'bold'),
                         padding=12,
                         background=colors['blue'],
                         foreground=colors['grey_light'],
@@ -42,7 +42,7 @@ def init_style():
                         foreground=[('active', colors['white_broken']), ('pressed', colors['white'])])
     
     style.configure('TEntry',
-                        font=('Arial', 12),
+                        font=('PT Sans Caption', 12),
                         padding=7,
                         background=colors['grey_light'],
                         fieldbackground=colors['grey_light'],
@@ -54,25 +54,25 @@ def init_style():
                         fieldbackground=[('active', colors['white_broken']), ('focus', colors['white_broken'])],)
 
     style.configure('TLabel',
-                        font=('Arial', 12))
+                        font=('PT Sans Caption', 12))
     
     style.configure('Display.TLabel',
-                        font=('Arial', 24, 'bold'),
+                        font=('PT Sans Caption', 24, 'bold'),
                         background=colors['navy'],
                         foreground=colors['white'])
     
     style.configure('Title.TLabel',
-                        font=('Arial', 16),
+                        font=('PT Sans Caption', 16),
                         background=colors['navy'],
                         foreground=colors['white'])
 
     style.configure('TitleB.TLabel',
-                        font=('Arial', 16, 'bold'),
+                        font=('PT Sans Caption', 16, 'bold'),
                         background=colors['navy'],
                         foreground=colors['white'])
 
     style.configure('Subtitle.TLabel',
-                        font=('Arial', 12),
+                        font=('PT Sans Caption', 12),
                         background=colors['navy'],
                         foreground=colors['white'])
                         
