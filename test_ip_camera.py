@@ -8,7 +8,7 @@ import numpy as np
 # specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
 
 # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture("http://admin:iit19@192.168.222.137:8080/stream/video/mjpeg")
+video_capture = cv2.VideoCapture("http://admin:iit19@192.168.236.250:8080/stream/video/mjpeg")
 
 process_this_frame =  True
 

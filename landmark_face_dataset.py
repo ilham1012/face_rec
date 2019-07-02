@@ -4,50 +4,65 @@ import argparse
 import pandas as pd
 import numpy as np
 
+dataset_path = "dataset/bpi/"
 
 # names = ["test"]
-names = ["rian", "aris", "jony", "unknown"]
+# names = ["rian", "aris", "jony", "unknown"]
 faces_landmarks = []
 faces_encodings = []
 
 # Loop for each person
-for name in names:
-    f = []
+for (dirpath, dirnames, filenames) in walk(dataset_path):
 
-    # loop for each photo of the person
-    for (dirpath, dirnames, filenames) in walk("dataset/" + name):
-        f.extend(filenames)
-        break
-
-    # print("files in folder:" + str(len(f)))
-
-
-    for pic in f:
-        # load image
-        image = face_recognition.load_image_file("dataset/" + name + "/" + pic)
-
+    for dirname in dirnames:
+        print('**********')
+        print(dirname)
+        print('**********')
+        
         # ---------------------
-        # extract face landmark
+        # List all the filename in folder
         # ---------------------
-        faces_landmark = face_recognition.face_landmarks(image)
-        if (len(faces_landmark) == 0):
-            print("No landmark in: " + name + "/" + pic)
-        else:
-            for landmark in faces_landmark:
-                landmark["name"] = str(name)
-                faces_landmarks.append(landmark)
+        f = []
 
-        # ------------------
-        # extract encoding
-        # ------------------
-        face_encodings = face_recognition.face_encodings(image)
-        if (len(face_encodings) == 0):
-            print("No encodings in: " + name + "/" + pic)
-        else:
-            for encoding in face_encodings:
-                lst = list(encoding)
-                lst.append(name)
-                faces_encodings.append(lst)
+        # loop for each photo of the person
+        for (dirpath, dirnames, filenames) in walk(dataset_path + dirname):
+            print('----------')
+            print(dataset_path + dirname)
+            print(filenames)
+            print('----------')
+
+            f.extend(filenames)
+            break
+
+        # print("files in folder:" + str(len(f)))
+
+
+        for pic in f:
+            # load image
+            image = face_recognition.load_image_file(dataset_path + dirname + "/" + pic)
+
+            # ---------------------
+            # extract face landmark
+            # ---------------------
+            faces_landmark = face_recognition.face_landmarks(image)
+            if (len(faces_landmark) == 0):
+                print("No landmark in: " + dirname + "/" + pic)
+            else:
+                for landmark in faces_landmark:
+                    landmark["name"] = str(dirname)
+                    faces_landmarks.append(landmark)
+
+            # ------------------
+            # extract encoding
+            # ------------------
+            face_encodings = face_recognition.face_encodings(image)
+            if (len(face_encodings) == 0):
+                print("No encodings in: " + dirname + "/" + pic)
+            else:
+                for encoding in face_encodings:
+                    lst = list(encoding)
+                    lst.append(dirname)
+                    faces_encodings.append(lst)
 
     print("total landmarks: " + str(len(faces_landmarks)))
 

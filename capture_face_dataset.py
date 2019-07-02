@@ -48,7 +48,7 @@ while True:
         right += 100
 
         crop_img = frame[top:bottom, left:right]
-        p = os.path.sep.join([args["output"], "novan-{}.png".format(
+        p = os.path.sep.join([args["output"], "{}.png".format(
 			str(total).zfill(5))])
 
         print(p)
