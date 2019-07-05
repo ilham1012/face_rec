@@ -18,7 +18,7 @@ def my_filled_circle(img, center):
 # specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
 
 # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture(1)
 # video_capture = cv2.VideoCapture("rtsp://admin:microsoftiit@192.168.21.68:8080")
 
 # Load classifier model
