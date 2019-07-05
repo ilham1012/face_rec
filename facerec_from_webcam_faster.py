@@ -18,7 +18,8 @@ def my_filled_circle(img, center):
 # specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
 
 # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(1)
+video_capture = cv2.VideoCapture(0)
+# video_capture = cv2.VideoCapture("http://admin:iit19@192.168.222.137:8080/stream/video/mjpeg")
 # video_capture = cv2.VideoCapture("rtsp://admin:microsoftiit@192.168.21.68:8080")
 
 # Load classifier model
@@ -47,15 +48,30 @@ while True:
         face_locations = face_recognition.face_locations(rgb_small_frame)
         face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
         faces_landmarks = face_recognition.face_landmarks(rgb_small_frame, face_locations)
+        
         # print("Face ldmrks: ", len(faces_landmarks))
+        # print("locs: ", len(face_locations))
 
         face_names = []
+
         # for face_encoding in face_encodings:
         #     # See if the face is a match for the known face(s)
         #     name = clf.predict(face_encoding)
         #     face_names.append(name)
+        valid_encodings = 0
+
         if (len(face_encodings) > 0):
-            face_names = clf.predict(face_encodings)
+            if(np.isnan(face_encodings[0][0])):
+                print("NaN")
+            elif(np.isinf(face_encodings[0][0])):
+                print("---------Inf------------")
+            else:
+                # if(not ( (np.isnan(face_encodings[0][0])) or (np.isinf(face_encodings[0][0])) )):
+                #print(face_encodings[0])
+                valid_encodings = 1
+                face_names = clf.predict(face_encodings)
+
+        print("face: ", len(face_encodings), " | valid: ", valid_encodings)
 
     process_this_frame = not process_this_frame
 
@@ -68,8 +84,8 @@ while True:
         bottom *= 4
         left *= 4
 
-    #     # Draw a box around the face
-    #     cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+        # Draw a box around the face
+        cv2.rectangle(frame, (left, top), (right, bottom), (255, 255, 255), 2)
 
         # Draw a label with a name below the face
         cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
