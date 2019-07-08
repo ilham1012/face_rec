@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import f1_score
 
-MODELS = ['decision_tree', 'svm', 'rf', 'adaboost']
+models = ['dt', 'svm', 'rf', 'adaboost']
 
 def train_evaluate(X, y, model, params):
     # print("--------")
@@ -14,14 +14,14 @@ def train_evaluate(X, y, model, params):
 
     # X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=1234)
 
-    if (model == MODELS[0]):
-        clf = tree.DecisionTreeClassifier().set_params(params)
-    elif (model == MODELS[1]):
-        clf = SVC().set_params(params)
-    elif (model == MODELS[2]):
+    if (model == models[0]):
+        clf = tree.DecisionTreeClassifier().set_params(**params)
+    elif (model == models[1]):
+        clf = SVC().set_params(**params)
+    elif (model == models[2]):
         clf = RandomForestClassifier().set_params(**params)
     else:
-        clf = AdaBoostClassifier().set_params(params)
+        clf = AdaBoostClassifier().set_params(**params)
         
     # y_pred = clf.fit(X_train, y_train).predict(X_valid)
     # score = f1_score(y_valid, y_pred, average='macro') #, average='macro', 'micro', 'weighted')
