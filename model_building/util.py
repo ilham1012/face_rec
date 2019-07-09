@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import tree
 from sklearn.svm import SVC
@@ -6,19 +7,45 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import f1_score
 
-models = ['dt', 'svm', 'rf', 'adaboost']
+import constant
+
+
+
+def load_data(csv_file):
+    # Load data
+    df  = pd.read_csv(csv_file)
+    df['128'] = df['128'].apply(lambda row: set_unknown(row))
+
+    # Split training & testing data
+    train, test = train_test_split(df, test_size=0.2)
+
+    # split feature & labels
+    X_train = train.drop('128', axis=1)
+    X_train = X_train.drop(['Unnamed: 0'],axis=1)
+    y_train = train['128']
+
+    X_test  = test.drop('128', axis=1)  
+    X_test  = X_test.drop(['Unnamed: 0'],axis=1)
+    y_test  = test['128']
+    # print(y_test.values)
+
+    return X_train, X_test, y_train, y_test
+
+
+
+def set_unknown(name):
+    if name in constant.REG_FACES:
+        return name
+    else:
+        return 'unknown'
 
 def train_evaluate(X, y, model, params):
-    # print("--------")
-    # print(params)
 
-    # X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=1234)
-
-    if (model == models[0]):
+    if (model == constant.MODELS[0]):
         clf = tree.DecisionTreeClassifier().set_params(**params)
-    elif (model == models[1]):
+    elif (model == constant.MODELS[1]):
         clf = SVC().set_params(**params)
-    elif (model == models[2]):
+    elif (model == constant.MODELS[2]):
         clf = RandomForestClassifier().set_params(**params)
     else:
         clf = AdaBoostClassifier().set_params(**params)

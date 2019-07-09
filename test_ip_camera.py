@@ -1,6 +1,6 @@
-import face_recognition
 import cv2
 import numpy as np
+import face_recognition
 
 
 # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
