@@ -41,105 +41,142 @@ ap.add_argument(
 args = vars(ap.parse_args())
 
 
+
 # Load data
 X_train, X_test, y_train, y_test = load_data('dataset/face_encodings.csv')
 
 
-# The list of hyper-parameters we want to optimize. For each one we define the bounds,
-# the corresponding scikit-learn parameter name, as well as how to sample values
-# from that dimension (`'log-uniform'` for the learning rate)
-space = []
+def find_optimal_hyperparam(model, optimizer, n_calls):
+    # The list of hyper-parameters we want to optimize. For each one we define the bounds,
+    # the corresponding scikit-learn parameter name, as well as how to sample values
+    # from that dimension (`'log-uniform'` for the learning rate)
+    space = []
 
-if (args["model"] == constant.MODELS[0]):
-    # Decision Tree
-    space  = [Categorical(['gini', 'entropy'], name='criterion'),
-            Integer(1, 1000, name='max_depth'),
-            Integer(2, 100, name='min_samples_split'),
-            Integer(1, 100, name='min_samples_leaf')]
+    if (model == constant.MODELS[0]):
+        # Decision Tree
+        space  = [Categorical(['gini', 'entropy'], name='criterion'),
+                Integer(1, 1000, name='max_depth'),
+                Integer(2, 100, name='min_samples_split'),
+                Integer(1, 100, name='min_samples_leaf')]
 
-elif (args["model"] == constant.MODELS[1]):
-    # SVM
-    space  = [Real(1e-6, 1e+6, prior='log-uniform', name='C'),
-              Categorical(['linear', 'poly', 'rbf'], name='kernel'),
-              Integer(1, 8, name='degree'),
-              Real(1e-6, 1e+1, prior='log-uniform', name='gamma')]
+    elif (model == constant.MODELS[1]):
+        # SVM
+        space  = [Real(1e-6, 1e+6, prior='log-uniform', name='C'),
+                Categorical(['linear', 'poly', 'rbf'], name='kernel'),
+                Integer(1, 8, name='degree'),
+                Real(1e-6, 1e+1, prior='log-uniform', name='gamma')]
 
-elif (args["model"] == constant.MODELS[2]):
-    # Random Forest
-    space  = [Integer(1, 200, name='n_estimators'),
-              Integer(1, 1000, name='max_depth'),
-              Integer(2, 100, name='min_samples_split'),
-              Integer(1, 100, name='min_samples_leaf')]
+    elif (model == constant.MODELS[2]):
+        # Random Forest
+        space  = [Integer(1, 200, name='n_estimators'),
+                Integer(1, 1000, name='max_depth'),
+                Integer(2, 100, name='min_samples_split'),
+                Integer(1, 100, name='min_samples_leaf')]
 
-else:
-    # Adaboost
-    space  = [Integer(1, 200, name='n_estimators'),
-              Real(1e-6, 1e+1, prior='log-uniform', name='learning_rate'),
-              Categorical(['SAMME', 'SAMME.R'], name='algorithm')]
-
-
-# this decorator allows your objective function to receive a the parameters as
-# keyword arguments. This is particularly convenient when you want to set scikit-learn
-# estimator parameters
-@use_named_args(space)
-def objective(**params):
-    return -1.0 * train_evaluate(X_train, y_train, args["model"], params)
+    else:
+        # Adaboost
+        space  = [Integer(1, 200, name='n_estimators'),
+                Real(1e-6, 1e-1, prior='log-uniform', name='learning_rate'),
+                Categorical(['SAMME', 'SAMME.R'], name='algorithm')]
 
 
-if (args["optimizer"] == constant.OPTIMIZERS[0]):
-    result_hpo = forest_minimize(objective, space, n_calls=args["ncalls"], random_state=0)
-elif (args["optimizer"] == constant.OPTIMIZERS[1]):
-    result_hpo = gbrt_minimize(objective, space, n_calls=args["ncalls"], random_state=0)
-else:
-    result_hpo = gp_minimize(objective, space, n_calls=args["ncalls"], random_state=0)
+    # this decorator allows your objective function to receive a the parameters as
+    # keyword arguments. This is particularly convenient when you want to set scikit-learn
+    # estimator parameters
+    @use_named_args(space)
+    def objective(**params):
+        return -1.0 * train_evaluate(X_train, y_train, model, params)
 
 
-print("----------")
-print("Clf: " + args["model"])
-print("Best score=%.4f" % result_hpo.fun)
+    if (optimizer == constant.OPTIMIZERS[0]):
+        result_hpo = forest_minimize(objective, space, n_calls=n_calls, random_state=0)
+    elif (optimizer == constant.OPTIMIZERS[1]):
+        result_hpo = gbrt_minimize(objective, space, n_calls=n_calls, random_state=0)
+    else:
+        result_hpo = gp_minimize(objective, space, n_calls=n_calls, random_state=0)
 
 
-print(result_hpo.x)
+    print("----------")
+    print("Clf: " + model + " - opt: ", optimizer)
+    print("Best score=%.4f" % result_hpo.fun)
+    print("----------")
 
-if (args["model"] == constant.MODELS[0]):
-    print("""Best parameters:
-        - criterion=%s
-        - max_depth=%d
-        - min_samples_split=%d
-        - min_samples_leaf=%d"""
-        % (result_hpo.x[0], result_hpo.x[1], 
-            result_hpo.x[2], result_hpo.x[3]))
 
-elif (args["model"] == constant.MODELS[1]):
-    print("""Best parameters:
-        - C=%f
-        - kernel=%s
-        - degree=%d
-        - gamma=%f"""
-        % (result_hpo.x[0], result_hpo.x[1], 
-            result_hpo.x[2], result_hpo.x[3]))
+    # print(result_hpo.x)
 
-elif (args["model"] == constant.MODELS[2]):
-    print("""Best parameters:
-            - n_estimators=%d
+    if (model == constant.MODELS[0]):
+        print("""Best parameters:
+            - criterion=%s
             - max_depth=%d
             - min_samples_split=%d
             - min_samples_leaf=%d"""
             % (result_hpo.x[0], result_hpo.x[1], 
                 result_hpo.x[2], result_hpo.x[3]))
-else:
-    print("""Best parameters:
-        - n_estimators=%d
-        - learning_rate=%f
-        - algorithm=%s"""
-        % (result_hpo.x[0], result_hpo.x[1], 
-            result_hpo.x[2]))
+
+    elif (model == constant.MODELS[1]):
+        print("""Best parameters:
+            - C=%f
+            - kernel=%s
+            - degree=%d
+            - gamma=%f"""
+            % (result_hpo.x[0], result_hpo.x[1], 
+                result_hpo.x[2], result_hpo.x[3]))
+
+    elif (model == constant.MODELS[2]):
+        print("""Best parameters:
+                - n_estimators=%d
+                - max_depth=%d
+                - min_samples_split=%d
+                - min_samples_leaf=%d"""
+                % (result_hpo.x[0], result_hpo.x[1], 
+                    result_hpo.x[2], result_hpo.x[3]))
+    else:
+        print("""Best parameters:
+            - n_estimators=%d
+            - learning_rate=%f
+            - algorithm=%s"""
+            % (result_hpo.x[0], result_hpo.x[1], 
+                result_hpo.x[2]))
+
+    return result_hpo
+
+    # TODO: Save plot of convergence, evaluations, and objective to file 
+
+    # axes = plot_convergence(result_hpo)
+    # fig = axes2fig(axes, figsize=(16,12))
+    # plt.show()
+
+    # axes = plot_evaluations(result_hpo, bins=10)
+    # fig = axes2fig(axes, figsize=(16,12))
+    # plt.show()
 
 
-axes = plot_convergence(result_hpo)
-fig = axes2fig(axes, figsize=(16,12))
-plt.show()
+# find_optimal_hyperparam(args["model"], args["optimizer"], args["ncalls"])
 
-# axes = plot_evaluations(result_hpo, bins=10)
-# fig = axes2fig(axes, figsize=(16,12))
-# plt.show()
+h_results = []
+h_models = []
+h_optimizers = []
+h_params = []
+
+for model in constant.MODELS:
+    for optimizer in constant.OPTIMIZERS:
+        result = find_optimal_hyperparam(model, optimizer, args["ncalls"])
+
+        h_models.append(model)
+        h_optimizers.append(optimizer)
+        h_results.append(result.fun)
+        h_params.append(result.x)
+
+
+df1 = pd.DataFrame(list(zip(h_models, h_optimizers, h_results)), 
+                   columns =['Classifier', 'Optimizer', 'Results'])
+
+df2 = pd.DataFrame(h_params, columns =['x1', 'x2', 'x3', 'x4'])
+
+print(df1)
+print(df2)
+
+df = pd.concat([df1, df2], axis=1, sort=False)
+print(df)
+
+df.to_csv('hpo_result.csv')
