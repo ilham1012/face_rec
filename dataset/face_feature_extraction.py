@@ -14,7 +14,7 @@ import numpy as np
 
 
 
-dataset_path = "bpi/"
+dataset_path = "dataset/bpi/"
 
 faces_landmarks = []
 faces_encodings = []

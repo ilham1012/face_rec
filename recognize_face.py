@@ -11,8 +11,8 @@ THRESHOLD = 0.85
 
 
 # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(0)
-# video_capture = cv2.VideoCapture("rtsp://admin:microsoftiit@192.168.21.68:8080")
+# video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture("http://admin:iit19@192.168.236.250:8080/stream/video/mjpeg")
 
 # Load classifier model
 
@@ -29,8 +29,11 @@ while True:
     # Grab a single frame of video
     ret, frame = video_capture.read()
 
+    # Resize frame of video to 1/2 size for faster face recognition processing
+    small_frame = cv2.resize(frame, (0, 0), fx=0.5, fy=0.5)
+
     # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    rgb_frame = frame[:, :, ::-1]
+    rgb_frame = small_frame[:, :, ::-1]
 
     # Only process every other frame of video to save time
     if odd_frame:

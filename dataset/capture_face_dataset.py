@@ -21,7 +21,8 @@ args = vars(ap.parse_args())
 
 
 # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture("http://admin:iit19@192.168.222.137:8080/stream/video/mjpeg")
+# video_capture = cv2.VideoCapture("http://admin:iit19@192.168.222.137:8080/stream/video/mjpeg")
+video_capture = cv2.VideoCapture(1)
 
 process_this_frame =  True
 total = 0
@@ -50,7 +51,7 @@ while True:
         right += 100
 
         crop_img = frame[top:bottom, left:right]
-        p = os.path.sep.join([args["output"], "{}.png".format(
+        p = os.path.sep.join([args["output"], "{}s.png".format(
 			str(total).zfill(5))])
 
         print(p)

@@ -9,12 +9,12 @@ from sklearn.metrics import classification_report, confusion_matrix
 import joblib
 
 import constant
-from util import set_unknown, load_data
+from util import set_unknown, split_xy_train_test
 
 
 
 # Load data
-X_train, X_test, y_train, y_test = load_data('dataset/face_encodings.csv')
+X_train, X_test, y_train, y_test = split_xy_train_test('dataset/face_encodings.csv')
 
 
 # Create classifier

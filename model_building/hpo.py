@@ -14,8 +14,8 @@ from skopt.utils import use_named_args
 from skopt import gp_minimize, forest_minimize, gbrt_minimize
 from skopt.plots import plot_convergence, plot_evaluations
 
-import constant
-from util import train_evaluate, axes2fig, set_unknown, load_data
+from utils.util import constant
+from utils.util import train_evaluate, axes2fig, set_unknown, load_train_test, split_xy_train_test
 
 
 plt.set_cmap("viridis")
@@ -31,19 +31,30 @@ ap.add_argument(
     "-o", "--optimizer",
     default="forest",
     help="choose in ['forest', 'gbrt', 'gp']"
-)
+    )
 ap.add_argument(
     "-n", "--ncalls",
     type=int,
     default=100,
     help="iteration of optimization"
-)
+    )
+ap.add_argument(
+    "-r", "--train",
+    default="dataset/face_encodings__train.csv",
+    help="location of train file"
+    )
+ap.add_argument(
+    "-e", "--test",
+    default="dataset/face_encodings__test.csv",
+    help="location of test file"
+    )
 args = vars(ap.parse_args())
 
 
 
 # Load data
-X_train, X_test, y_train, y_test = load_data('dataset/face_encodings.csv')
+train, test = load_train_test(args['train'], args['test'])
+X_train, X_test, y_train, y_test = split_xy_train_test(train, test)
 
 
 def find_optimal_hyperparam(model, optimizer, n_calls):
