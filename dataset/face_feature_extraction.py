@@ -93,5 +93,5 @@ df2.rename(columns={'128':'name'}, inplace=True)
 print(df2.columns)
 
 # Save to CSV
-df.to_csv(r'dataset/face_landmarks.csv')
-df2.to_csv(r'dataset/face_encodings.csv')
+df.to_csv(r'dataset/face_landmarks.csv', index=False)
+df2.to_csv(r'dataset/face_encodings.csv', index=False)

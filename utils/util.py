@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -26,7 +28,6 @@ def load_train_test(csv_file_train, csv_file_test):
 
 def split_x_y(df, class_col='128'):
     X = df.drop(class_col, axis=1)
-    X = X.drop(['Unnamed: 0'], axis=1)
     y = df[class_col]
     
     return X, y
@@ -37,6 +38,13 @@ def split_xy_train_test(train, test):
     X_test, y_test = split_x_y(test)
 
     return X_train, X_test, y_train, y_test
+
+
+def load_data__split_xy_train_test(csv_file):
+    df = load_data(csv_file)
+    train, test = train_test_split(df, test_size=0.2)
+    return split_xy_train_test(train, test)
+
 
 
 def set_unknown(name):
@@ -52,6 +60,7 @@ def train_evaluate(X, y, model, params):
         clf = tree.DecisionTreeClassifier().set_params(**params)
     elif (model == constant.MODELS[1]):
         clf = SVC().set_params(**params)
+        print("use SVM")
     elif (model == constant.MODELS[2]):
         clf = RandomForestClassifier().set_params(**params)
     else:
@@ -60,7 +69,10 @@ def train_evaluate(X, y, model, params):
     # y_pred = clf.fit(X_train, y_train).predict(X_valid)
     # score = f1_score(y_valid, y_pred, average='macro') #, average='macro', 'micro', 'weighted')
 
-    score = cross_val_score(clf, X, y, cv=3)
+    start_time = time.time()
+    score = cross_val_score(clf, X, y, cv=3, n_jobs=-1)
+    print(score)
+    print("--- %s seconds ---" % (time.time() - start_time))
 
     return np.mean(score)
         

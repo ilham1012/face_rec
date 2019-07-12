@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import joblib
+# import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix  
 from skopt.space import Real, Integer
@@ -14,11 +14,11 @@ from skopt.utils import use_named_args
 from skopt import gp_minimize, forest_minimize, gbrt_minimize
 from skopt.plots import plot_convergence, plot_evaluations
 
-from utils.util import constant
+from utils import constant
 from utils.util import train_evaluate, axes2fig, set_unknown, load_train_test, split_xy_train_test
 
 
-plt.set_cmap("viridis")
+plt.set_cmap("tab10") #viridis
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -33,7 +33,7 @@ ap.add_argument(
     help="choose in ['forest', 'gbrt', 'gp']"
     )
 ap.add_argument(
-    "-n", "--ncalls",
+    "-n", "--n_calls",
     type=int,
     default=100,
     help="iteration of optimization"
@@ -72,10 +72,10 @@ def find_optimal_hyperparam(model, optimizer, n_calls):
 
     elif (model == constant.MODELS[1]):
         # SVM
-        space  = [Real(1e-6, 1e+6, prior='log-uniform', name='C'),
+        space  = [Real(1e-2, 1e+2, prior='log-uniform', name='C'),
                 Categorical(['linear', 'poly', 'rbf'], name='kernel'),
                 Integer(1, 8, name='degree'),
-                Real(1e-6, 1e+1, prior='log-uniform', name='gamma')]
+                Real(1e-2, 1e+1, prior='log-uniform', name='gamma')]
 
     elif (model == constant.MODELS[2]):
         # Random Forest
@@ -162,24 +162,28 @@ def find_optimal_hyperparam(model, optimizer, n_calls):
     # plt.show()
 
 
-# find_optimal_hyperparam(args["model"], args["optimizer"], args["ncalls"])
+# find_optimal_hyperparam(args["model"], args["optimizer"], args["n_calls"])
 
 h_results = []
+h_results_fun = []
 h_models = []
 h_optimizers = []
 h_params = []
 
 for model in constant.MODELS:
     for optimizer in constant.OPTIMIZERS:
-        result = find_optimal_hyperparam(model, optimizer, args["ncalls"])
+        result = find_optimal_hyperparam(model, optimizer, args["n_calls"])
+
+        result_pair = (model + ' - ' + optimizer, result)
+        h_results.append(result_pair)
 
         h_models.append(model)
         h_optimizers.append(optimizer)
-        h_results.append(result.fun)
+        h_results_fun.append(result.fun)
         h_params.append(result.x)
 
 
-df1 = pd.DataFrame(list(zip(h_models, h_optimizers, h_results)), 
+df1 = pd.DataFrame(list(zip(h_models, h_optimizers, h_results_fun)), 
                    columns =['Classifier', 'Optimizer', 'Results'])
 
 df2 = pd.DataFrame(h_params, columns =['x1', 'x2', 'x3', 'x4'])
@@ -191,3 +195,7 @@ df = pd.concat([df1, df2], axis=1, sort=False)
 print(df)
 
 df.to_csv('hpo_result.csv')
+
+axes = plot_convergence(*h_results)
+fig = axes2fig(axes, figsize=(16,12))
+plt.show()

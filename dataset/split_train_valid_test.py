@@ -27,7 +27,8 @@ args = vars(ap.parse_args())
 
 
 # Load data
-df = load_data(args['input'])
+df = load_data(args['input']).drop(['Unnamed: 0'],axis=1)
+print(df)
 train, test = train_test_split(df, test_size=0.2)
 
 print('total')
@@ -39,5 +40,5 @@ print(train['128'].value_counts()) # / len(train) * 100)
 print('test')
 print(test['128'].value_counts()) # / len(test) * 100)
 
-train.to_csv(args['train'])
-test.to_csv(args['test'])
+train.to_csv(args['train'], index=False)
+test.to_csv(args['test'], index=False)
