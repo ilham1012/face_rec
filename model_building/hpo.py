@@ -90,13 +90,13 @@ def find_optimal_hyperparam(model, optimizer, n_calls):
                 Real(1e-6, 1e-1, prior='log-uniform', name='learning_rate'),
                 Categorical(['SAMME', 'SAMME.R'], name='algorithm')]
 
-
     # this decorator allows your objective function to receive a the parameters as
     # keyword arguments. This is particularly convenient when you want to set scikit-learn
     # estimator parameters
     @use_named_args(space)
     def objective(**params):
-        return -1.0 * train_evaluate(X_train, y_train, model, params)
+        clf = init_model(model, params)
+        return -1.0 * train_evaluate(X_train, y_train, clf)
 
 
     if (optimizer == constant.OPTIMIZERS[0]):
