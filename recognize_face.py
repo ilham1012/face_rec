@@ -1,8 +1,11 @@
+import time
+
 import face_recognition
 import cv2
 import numpy as np
 from sklearn.externals import joblib
-import time
+
+import pandas as pd
 
 # Const
 # Threshold for face recognition confidence score
@@ -28,6 +31,13 @@ FRAME_SKIPPING = 10
 
 frame_idx = 0
 odd_frame = True
+
+# FOR TESTING ONLY
+N_TESTING = 50
+det_times = []
+lmk_times = []
+enc_times = []
+clf_times = []
 
 def recognize_face(rgb_frame):
     # Find all the faces and face encodings in the current frame of video
@@ -63,6 +73,13 @@ def recognize_face(rgb_frame):
 
         print("-----")
 
+        det_times.append(time_1 - time_0)
+        lmk_times.append(time_3 - time_2)
+        enc_times.append(time_4 - time_3)
+        clf_times.append(time_5 - time_4)
+
+    
+
 
 while True:
     # Grab a single frame of video
@@ -94,7 +111,18 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
+    # FOR TESTING
+    if len(clf_times) > N_TESTING + 10:
+        break
 
 # Release handle to the webcam
 video_capture.release()
 cv2.destroyAllWindows()
+
+
+# FOR TESTING
+df = pd.DataFrame(list(zip(det_times, lmk_times, enc_times, clf_times)),
+                    columns=['Face Detection', 'Finding Landmarks', 'Face Encoding', 'Classification'])
+
+print(df)
+df.to_csv(r'experiments/running_test.csv')
