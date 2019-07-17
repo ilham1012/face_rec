@@ -11,12 +11,12 @@ THRESHOLD = 0.85
 
 
 # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture(1)
 # video_capture = cv2.VideoCapture("http://admin:iit19@192.168.236.250:8080/stream/video/mjpeg")
 
 # Load classifier model
 
-clf = joblib.load('models/ada__2019-07-16_14-11-06.pkl')
+clf = joblib.load('models/rf__2019-07-16_14-10-34.pkl')
 
 # Initialize some variables
 face_locations = []
@@ -57,7 +57,7 @@ def recognize_face(rgb_frame):
         print("Total Time: ", time_5 - time_0)
         # print("lmrk: ", time_3 - time_2, ", enc: ", time_4 - time_3, ", pred: ", time_5 - time_4)
 
-        if max_prob > THRESHOLD:
+        if (name != "unknown") and (max_prob > THRESHOLD):
             # OPEN THE DOOR
             print("OPEN THE DOOR")
 
@@ -77,14 +77,14 @@ while True:
     # Only process every other frame of video to save time
     # if odd_frame:
     if frame_idx == FRAME_SKIPPING:
-        print("process!")
+        # print("process!")
         frame_idx = 0
         recognize_face(rgb_frame)
     # odd_frame = not odd_frame
     else:
         frame_idx += 1
         
-    print("idx: ", frame_idx)
+    # print("idx: ", frame_idx)
 
     
     # Display the resulting image
