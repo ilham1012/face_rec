@@ -1,11 +1,14 @@
 import time
 import sys
+import argparse
 
 import face_recognition
 import cv2
 import numpy as np
 from sklearn.externals import joblib
 from firebase import firebase
+
+from utils import constant
 
 import pandas as pd
 
@@ -15,13 +18,50 @@ import pandas as pd
 THRESHOLD = 0.85
 
 
+
+# construct the argument parser and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument(
+    "-m", "--model",
+    default="svm",
+    help="choose in ['dt', 'svm', 'rf', 'adaboost']"
+    )
+ap.add_argument(
+    "-v", "--video_capture",
+    default="ip_cam",
+    help="choose ['0', '1', 'ip_cam']"
+    )
+ap.add_argument(
+    "-n", "--n_test",
+    default=100,
+    help="location of test file"
+    )
+args = vars(ap.parse_args())
+
+
 # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(3)
-# video_capture = cv2.VideoCapture("http://admin:iit19@192.168.236.250:8080/stream/video/mjpeg")
+video_capture = None
+
+time_x = time.time()
+if (args['video_capture'] == '0'):
+	video_capture = cv2.VideoCapture(0)
+elif (args['video_capture'] == '1'):
+	video_capture = cv2.VideoCapture(1)
+else:
+	video_capture = cv2.VideoCapture("http://admin:admin@192.168.0.10:8080/stream/video/mjpeg")
+print("vc took ", time.time() - time_x, "s")
 
 # Load classifier model
 
-clf = joblib.load('models/svm__2019-07-16_14-09-42.pkl')
+if (args['model'] == constant.MODELS[0]): #dt
+	clf = joblib.load('models/dt__2019-07-16_14-08-52.pkl')
+elif (args['model'] == constant.MODELS[1]): #svm
+        clf = joblib.load('models/svm__2019-07-16_14-09-42.pkl')
+elif (args['model'] == constant.MODELS[3]): #rf
+        clf = joblib.load('models/rf__2019-07-16_14-10-34.pkl')
+else:
+        clf = joblib.load('models/ada__2019-07-16_14-11-06.pkl')
+
 
 # Initialize some variables
 face_locations = []
@@ -39,7 +79,7 @@ device_url = '/gedung30/lab_iit/pintu'
 
 
 # FOR TESTING ONLY
-N_TESTING = 50
+N_TESTING = args['n_test']
 det_times = []
 lmk_times = []
 enc_times = []
@@ -59,7 +99,7 @@ def relock(response):
 def recognize_face(rgb_frame):
     # Find all the faces and face encodings in the current frame of video
     time_0 = time.time()
-    face_locations = face_recognition.face_locations(rgb_frame)
+    face_locations = face_recognition.face_locations(rgb_frame, model="hog")
     time_1 = time.time()
 
     # print(len(face_locations), " face(s) on: ", time_1 - time_0, "s")
