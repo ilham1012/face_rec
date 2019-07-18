@@ -1,9 +1,11 @@
 import time
+import sys
 
 import face_recognition
 import cv2
 import numpy as np
 from sklearn.externals import joblib
+from firebase import firebase
 
 import pandas as pd
 
@@ -14,16 +16,17 @@ THRESHOLD = 0.85
 
 
 # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(1)
+video_capture = cv2.VideoCapture(3)
 # video_capture = cv2.VideoCapture("http://admin:iit19@192.168.236.250:8080/stream/video/mjpeg")
 
 # Load classifier model
 
-clf = joblib.load('models/rf__2019-07-16_14-10-34.pkl')
+clf = joblib.load('models/svm__2019-07-16_14-09-42.pkl')
 
 # Initialize some variables
 face_locations = []
 face_encodings = []
+faces_landmarks = []
 face_names = []
 
 RESIZE_FACTOR = 4
@@ -32,12 +35,26 @@ FRAME_SKIPPING = 10
 frame_idx = 0
 odd_frame = True
 
+device_url = '/gedung30/lab_iit/pintu'
+
+
 # FOR TESTING ONLY
 N_TESTING = 50
 det_times = []
 lmk_times = []
 enc_times = []
 clf_times = []
+just_open = False
+justcount = 0
+
+
+
+def relock(response):
+    print(response)
+    time.sleep(2)
+    # result = firebase.put(device_url, 'lock', True)
+    # print(result)
+
 
 def recognize_face(rgb_frame):
     # Find all the faces and face encodings in the current frame of video
@@ -70,16 +87,32 @@ def recognize_face(rgb_frame):
         if (name != "unknown") and (max_prob > THRESHOLD):
             # OPEN THE DOOR
             print("OPEN THE DOOR")
+            just_open = True
+            # result = firebase.put_async(device_url, 'lock', False, callback=relock)
+            # result = firebase.put(device_url, 'lock', False)
+            # relock(result)
+            return face_locations, just_open, faces_landmarks
 
         print("-----")
+        return [], False, faces_landmarks
 
-        det_times.append(time_1 - time_0)
-        lmk_times.append(time_3 - time_2)
-        enc_times.append(time_4 - time_3)
-        clf_times.append(time_5 - time_4)
 
+        # det_times.append(time_1 - time_0)
+        # lmk_times.append(time_3 - time_2)
+        # enc_times.append(time_4 - time_3)
+        # clf_times.append(time_5 - time_4)
+
+    return [], False, []
     
 
+def my_filled_circle(img, center):
+    center = tuple([RESIZE_FACTOR * x for x in center])
+    cv2.circle(img, center, 2, (255, 200, 255))
+
+
+# firebase = firebase.FirebaseApplication('https://lab-iit.firebaseio.com', None)
+# doorlock = firebase.get(device_url, None)
+# print("FIREBASE : ", doorlock)
 
 while True:
     # Grab a single frame of video
@@ -91,38 +124,59 @@ while True:
     # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
     rgb_frame = small_frame[:, :, ::-1]
 
-    # Only process every other frame of video to save time
-    # if odd_frame:
-    if frame_idx == FRAME_SKIPPING:
-        # print("process!")
-        frame_idx = 0
-        recognize_face(rgb_frame)
-    # odd_frame = not odd_frame
+
+    # DEMO
+    if (just_open):
+        # Pause processing for 300 frame
+        # print("just_count: ", justcount)
+        justcount += 1
+
+        if (justcount > 100):
+            justcount = 0
+            just_open = False
+        
     else:
-        frame_idx += 1
+        # Only process every other frame of video to save time
+        # if odd_frame:
+        if frame_idx == FRAME_SKIPPING:
+            # print("process!")
+            frame_idx = 0
+            face_locations, just_open, faces_landmarks = recognize_face(rgb_frame)
+        # odd_frame = not odd_frame
+        else:
+            frame_idx += 1
         
     # print("idx: ", frame_idx)
 
+    # Display the results
+    for top, right, bottom, left in face_locations:
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
+
+        # Draw a box around the face
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+
+    for face_landmarks in faces_landmarks:
+        for landmark in face_landmarks:
+            # print(landmark)
+            for point in face_landmarks[landmark]:
+                my_filled_circle(frame, point)
     
     # Display the resulting image
     cv2.imshow('Video', frame)
 
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        # Release handle to the webcam
+        print('===== Q =====')
+        cv2.destroyAllWindows()
+        print('===== Destroy Windows =====')
         break
 
-    # FOR TESTING
-    if len(clf_times) > N_TESTING + 10:
-        break
-
-# Release handle to the webcam
-video_capture.release()
-cv2.destroyAllWindows()
-
-
-# FOR TESTING
-df = pd.DataFrame(list(zip(det_times, lmk_times, enc_times, clf_times)),
-                    columns=['Face Detection', 'Finding Landmarks', 'Face Encoding', 'Classification'])
-
-print(df)
-df.to_csv(r'experiments/running_test.csv')
+print('===== VC Release =====')
+# video_capture.release()
+print("close")
+sys.exit()
