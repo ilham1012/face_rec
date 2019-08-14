@@ -1,0 +1,31 @@
+<FaceScanScreen@Screen>:
+
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        padding: 20
+
+        BoxLayout:
+            id: cam_canvas
+            label_display: label_display
+            cam_display: cam_display
+            orientation: 'vertical'
+
+            Label:
+                id: label_display
+                text: 'wooo'
+
+            Image:
+                id: cam_display
+                width: 640
+                height: 480
+
+        Button:
+            text: "Kembali"
+            on_press:
+                root.manager.transition.direction = "right"
+                root.manager.transition.duration = .5
+                root.manager.current = "main_screen"
+
+

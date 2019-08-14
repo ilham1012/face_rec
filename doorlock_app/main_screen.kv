@@ -1,0 +1,32 @@
+
+<MainScreen@Screen>:
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        padding: 20
+
+        BoxLayout:
+            orientation: "vertical"
+
+            Label:
+                text: "Halo!"
+
+            Label:
+                id: info_text
+                text: "Saat ini ada 3 orang di Lab"
+
+        BoxLayout:
+            orientation: "vertical"
+            spacing: 10
+            padding: 20
+
+            Button:
+                text: "Masuk"
+                on_press:
+                    root.manager.transition.direction = "left"
+                    root.manager.transition.duration = .5
+                    root.manager.current = "face_scan_screen"
+
+            Button:
+                text: "Tambah Member"

@@ -1,0 +1,52 @@
+#:kivy 1.10.1
+
+<ScreenManagement>:
+    first_screen: first_screen
+    second_screen: second_screen
+
+    FirstScreen:
+        id: first_screen
+        name: 'first_screen'
+
+    SecondScreen:
+        id: second_screen
+        name: 'second_screen'
+
+
+
+<FirstScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: info_text
+            text: "This is First Screen"
+
+        Button:
+            text: "Switch"
+            on_press:
+                root.manager.transition.direction = "left"
+                root.manager.transition.duration = .5
+                root.manager.current = "second_screen"
+
+
+
+<SecondScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: info_text_2
+            text: "This is Second Screen"
+
+        Image:
+            id: cam_display
+            width: 640
+            height: 480
+
+        Button:
+            text: "Switch"
+            on_press:
+                root.manager.transition.direction = "right"
+                root.manager.transition.duration = .5
+                root.manager.current = "first_screen"
