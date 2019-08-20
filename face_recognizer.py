@@ -20,7 +20,6 @@ class FaceRecognizer():
         Recognize face name and probability given rgb_frame.
     """
 
-
     # Initialize some variables
     face_locations = []
     face_encodings = []
@@ -79,8 +78,10 @@ class FaceRecognizer():
         self.faces_landmarks = face_recognition.face_landmarks(rgb_frame, self.face_locations)
         self.face_encodings = face_recognition.face_encodings(rgb_frame, self.face_locations)
         
+        # Clasify with probabilities of each prediction
         prob = self.clf.predict_proba(self.face_encodings)
 
+        # Get names and probs of top prediction
         max_prob_idx = prob.argmax(axis=1)
         names = self.clf.classes_[max_prob_idx]
         max_probs = prob[0][max_prob_idx]

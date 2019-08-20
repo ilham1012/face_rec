@@ -1,0 +1,235 @@
+#:kivy 1.10.1
+#:import utils kivy.utils
+
+<ScreenManagement>:
+    front_screen: front_screen
+    scan_screen: scan_screen
+    result_screen: result_screen
+    background: 32, 38, 161, 1
+
+    FrontScreen:
+        id: front_screen
+        name: 'front_screen'
+
+    ScanScreen:
+        id: scan_screen
+        name: 'scan_screen'
+
+    ResultScreen:
+        id: result_screen
+        name: 'result_screen'
+
+
+
+<FrontScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgb: utils.get_color_from_hex('#2026A1')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                
+        BoxLayout:
+            orientation: 'horizontal'
+
+            RelativeLayout:
+                DisplayText:
+                    text: "Halo!"
+                    halign: 'left'
+                    text_size: self.parent.width - 100, None
+                    pos: 80, self.parent.height / 2
+
+                SubheadingText:
+                    id: info_text
+                    text: "Saat ini ada 3 orang di Lab"
+                    halign: 'left'
+                    text_size: self.parent.width - 100, None
+                    pos: 80, self.parent.height / 2 - 30
+
+            Image:
+                source: 'kv/img/home_img.png'
+                pos: self.parent.width, 0
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size: root.width, 180
+            size_hint: None, None
+            padding: 80, 40
+            spacing: 30
+            canvas.before:
+                Color:
+                    rgb: 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            SecondaryButton:
+                text: "Tambah"
+
+            PrimaryButton:
+                text: "Masuk"
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.transition.duration = .5
+                    root.manager.current = "scan_screen"
+
+
+
+<ScanScreen>:
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#2026A1')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Image:
+        id: cam_display
+        width: 640
+        height: 480
+        pos_hint: {'center_x': .5, 'center_y': .5}
+
+    BgHeading:
+        background_color: 1, 1, 1, .5
+        text: "Pemindaian Wajah"
+        text_size: None, None
+        color: utils.get_color_from_hex('#21214E')
+        pos: (root.width - self.width) / 2, cam_display.pos[1] + cam_display.height - 60
+    
+    BgSubheading:
+        id: info_text
+        background_color: 1, 1, 1, .5
+        text: "Pastikan wajah tidak tertutupi"
+        text_size: None, None
+        color: utils.get_color_from_hex('#21214E')
+        pos: (root.width - self.width) / 2, cam_display.pos[1] + cam_display.height - 82
+
+    SecondaryButtonSM:
+        text: "Emergency"
+        size: 240, 60
+        pos: (root.width / 2) - (self.width / 2), 40
+        size_hint: None, None
+        on_release:
+            root.manager.transition.direction = "right"
+            root.manager.transition.duration = .5
+            root.manager.current = "front_screen"
+
+
+<ResultScreen>:
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#2026A1')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    SubheadingText:
+        id: info_text
+        text: "Wajah dikenali"
+        text_size: root.width, None
+        pos: 0, info_text_2.pos[1] + 30
+
+    HeadingText:
+        id: info_text_2
+        text: "Selamat Datang"
+        text_size: root.width, None
+        pos: 0, img_display.pos[1] + img_display.height + 20
+
+    HeadingText:
+        id: info_text_3
+        text: "Nama"
+        text_size: root.width, None
+        pos: 0, img_display.pos[1] - 40
+
+    SubheadingText:
+        id: info_text_4
+        font_size: 16
+        text: "Confidence score: 93%"
+        text_size: root.width, None
+        pos: 0, info_text_3.pos[1] - 20
+
+    ImageCrop:
+        id: img_display
+        width: 240
+        height: 220
+        pos: (root.width - self.width) / 2, (root.height - self.height) / 2
+
+
+<CustButton@Button>:
+    font_size: 24
+    bold: True
+    border: 8, 8, 8, 8
+
+
+<PrimaryButton@CustButton>:
+    background_normal: 'kv/img/primary_bg.png'
+    background_down: 'kv/img/primary_bg_down.png'
+
+
+<SecondaryButton@CustButton>:
+    background_normal: 'kv/img/secondary_bg.png'
+    background_down: 'kv/img/secondary_bg_down.png'
+    color: utils.get_color_from_hex('#21214E')
+
+<PrimaryButtonSM@PrimaryButton>:
+    font_size: 18
+    bold: False
+
+<SecondaryButtonSM@SecondaryButton>:
+    font_size: 18
+    bold: False
+
+<HeadingText@Label>
+    font_size: 24
+    bold: True
+    size_hint: None, None
+    text_size: root.width, None
+    size: self.texture_size
+    halign: 'center'
+
+<SubheadingText@HeadingText>
+    font_size: 18
+    bold: False
+
+<DisplayText@HeadingText>
+    font_size: 36
+
+<ImageCrop@RelativeLayout>
+    size_hint: None, None
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#4D4EA6')
+        Rectangle:
+            pos: 0, 0
+            size: (self.width, self.height - 20)
+
+    Image:
+        id: crop_img
+        size_hint: None, None
+        width: 200
+        height: 200
+        pos: (self.parent.width - self.width) / 2, self.parent.height - self.height
+
+
+# Define your background color Template
+<BackgroundColor@Widget>
+    background_color: 1, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+# Now you can simply Mix the `BackgroundColor` class with almost
+# any other widget... to give it a background.
+<BgSubheading@SubheadingText+BackgroundColor>
+    background_color: 0, 0, 0, 0
+    # Default the background color for this label
+    # to r 0, g 0, b 0, a 0
+    
+<BgHeading@HeadingText+BackgroundColor>
+    background_color: 0, 0, 0, 0
+    # Default the background color for this label
+    # to r 0, g 0, b 0, a 0
