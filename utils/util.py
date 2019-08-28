@@ -15,6 +15,15 @@ from sklearn.calibration import CalibratedClassifierCV
 
 from utils import constant
 
+def calc_centroid(rect):
+    (startY, endX, endY, startX) = rect
+    centroidX = int((endX - startX) / 2) + startX
+    centroidY = int((endY - startY) / 2) + startY
+
+    centroid = (centroidX, centroidY)
+
+    return centroid
+
 
 def load_data(csv_file):
     df  = pd.read_csv(csv_file)
@@ -50,12 +59,12 @@ def load_data__split_xy_train_test(csv_file):
     return split_xy_train_test(train, test)
 
 
-
 def set_unknown(name):
     if name in constant.REG_FACES:
         return name
     else:
         return 'unknown'
+
 
 def init_model(model, params):
     if (model == constant.MODELS[0]):
@@ -70,6 +79,7 @@ def init_model(model, params):
     clf = CalibratedClassifierCV(clf_algo)
     
     return clf
+
 
 def train_evaluate(X, y, clf, cv=3):   
     # y_pred = clf.fit(X_train, y_train).predict(X_valid)
