@@ -26,7 +26,7 @@ class FaceRecognizer():
     faces_landmarks = []
     face_names = []
     
-    def __init__(self, clasifier):
+    def __init__(self, clasifier="default"):
         """Init the recognizer's clasifier model"""
 
         # Set classifier model
@@ -35,18 +35,28 @@ class FaceRecognizer():
             self.clf = joblib.load('models/dt__2019-07-16_14-08-52.pkl')
         elif (clasifier == constant.MODELS[1]): #svm
             self.clf = joblib.load('models/svm__2019-07-16_14-09-42.pkl')
-        elif (clasifier == constant.MODELS[3]): #rf
+        elif (clasifier == constant.MODELS[2]): #rf
             self.clf = joblib.load('models/rf__2019-07-16_14-10-34.pkl')
-        else:
+        elif (clasifier == constant.MODELS[3]): #Adaboost
             self.clf = joblib.load('models/ada__2019-07-16_14-11-06.pkl')
+        else:
+            self.clf = joblib.load('doorlock_app/models/model.pkl')
 
-    def recognize_face(self, rgb_frame, multiface=True):
+
+
+    def recognize_face(self, rgb_frame, multiface=True, model="hog"):
         """Main function of face recognition of this class.
 
         Parameters
         ----------
         rgb_frame : numpy array
             frame from camera with RGB color format
+        
+        multiface : bool (default True)
+            allow to recognize > 1 face
+        
+        model : string (choose ["hog", "cnn"]; default "hog")
+            face detection and bounding box model: Histogram Oriented Gradient or CNN-based model
 
         Returns
         -------
@@ -58,7 +68,7 @@ class FaceRecognizer():
         max_probs = None
 
         # Find all the faces and face encodings in the current frame of video
-        self.face_locations = face_recognition.face_locations(rgb_frame, model="hog")
+        self.face_locations = face_recognition.face_locations(rgb_frame, model=model)
 
         # Make sure there are face detected
         if (len(self.face_locations) > 0):
