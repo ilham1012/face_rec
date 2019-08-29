@@ -4,9 +4,11 @@ import tkinter as tk
 from PIL import Image
 from PIL import ImageTk
 import cv2
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
-from doorlock.constants import LARGE_FONT, MEDIUM_FONT
+
+LARGE_FONT = ("Helvetica", 18)
+MEDIUM_FONT = ("Times New Roman", 16)
 
 class ResultScreen(tk.Frame):
     output_pin = 18
@@ -14,7 +16,7 @@ class ResultScreen(tk.Frame):
     def __init__(self, parent, app):
         tk.Frame.__init__(self, parent)
 
-        # self.GPIO_init()
+        self.GPIO_init()
 
         self.title_txt = tk.StringVar()
         self.subtitle_txt = tk.StringVar()
@@ -30,14 +32,17 @@ class ResultScreen(tk.Frame):
         self.app = app
 
     def show_screen(self):
-        print("result")
-        # try:
-        #     GPIO.output(self.output_pin, GPIO.HIGH)
-        #     time.sleep(2)
-        #     GPIO.output(self.output_pin, GPIO.LOW)
-        # finally:
-        #     GPIO.cleanup()
-        time.sleep(2)
+        print("[SHOW SCREEN] Result")
+        self.GPIO_init()
+        try:
+            print("GPIO.HIGH")
+            GPIO.output(self.output_pin, GPIO.HIGH)
+            print("Sleep")
+            time.sleep(2)
+            print("GPIO.LOW")
+            GPIO.output(self.output_pin, GPIO.LOW)
+        finally:
+            GPIO.cleanup()
         self.app.show_frame("home")
 
     def update_info(self, name, prob, img):
@@ -56,6 +61,6 @@ class ResultScreen(tk.Frame):
         self.panel.configure(image=image)
         self.panel.image = image
 
-    # def GPIO_init(self):
-    #     GPIO.setmode(GPIO.BCM)
-    #     GPIO.setup(self.output_pin, GPIO.OUT, initial=GPIO.LOW)
+    def GPIO_init(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.output_pin, GPIO.OUT, initial=GPIO.LOW)

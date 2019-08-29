@@ -44,7 +44,7 @@ class ScanNewScreen(tk.Frame):
         button1.place(relx=0.5, rely=0.9, anchor=tk.CENTER)
 
     def show_screen(self):
-        print("Two")
+        print("[SHOW SCREEN] Scan New Face")
         self.stop_event = threading.Event()
         self.thread = threading.Thread(target=self.video_loop, args=(), daemon=True)
         self.thread.start()

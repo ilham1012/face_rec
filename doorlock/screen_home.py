@@ -38,4 +38,4 @@ class HomeScreen(tk.Frame):
         button2.pack(side=tk.LEFT, pady=30, padx=50, fill=tk.BOTH, expand=True)
 
     def show_screen(self):
-        print("Home")
+        print("[SHOW SCREEN] Home")

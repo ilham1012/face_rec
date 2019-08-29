@@ -6,7 +6,7 @@ import face_recognition
 import cv2
 import numpy as np
 from sklearn.externals import joblib
-from firebase import firebase
+#from firebase import firebase
 
 from utils import constant
 

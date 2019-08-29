@@ -23,7 +23,7 @@ class ScanScreen(tk.Frame):
 
     THRESHOLD = 0.85
     RESIZE_FACTOR = 4
-    fr = FaceRecognizer(MODEL_URL + 'model.pkl')
+    fr = FaceRecognizer(MODEL_URL + 'model_.pkl')
 
     def __init__(self, parent, app):
         tk.Frame.__init__(self, parent)
@@ -44,7 +44,7 @@ class ScanScreen(tk.Frame):
         button1.place(relx=0.5, rely=0.9, anchor=tk.CENTER)
 
     def show_screen(self):
-        print("Two")
+        print("[SHOW SCREEN] Scan")
         
         self.stop_event = threading.Event()
         self.thread = threading.Thread(target=self.video_loop, args=(), daemon=True)
@@ -67,7 +67,7 @@ class ScanScreen(tk.Frame):
                 # grab the frame from the video stream and resize it to
                 # have a maximum width of 300 pixels
                 self.frame = self.app.video_stream.read()
-                print(self.frame)
+                # print(self.frame)
                 # self.frame = imutils.resize(self.frame, width=480)
 
                 if (self.frame_status == 'pre'):

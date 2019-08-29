@@ -77,13 +77,13 @@ class App(tk.Tk):
 
     def show_frame(self, screen_class):
         screen = self.screens[screen_class]
-        print(screen)
+        # print(screen)
         screen.tkraise()
         screen.show_screen()
 
     def on_close(self):
         self.video_stream.stop()
-        print("CLOSE APP")
+        print("[INFO] Close App")
         self.quit()
 
 
