@@ -5,6 +5,7 @@
     front_screen: front_screen
     scan_screen: scan_screen
     result_screen: result_screen
+    register_screen: register_screen
     background: 32, 38, 161, 1
 
     FrontScreen:
@@ -18,6 +19,10 @@
     ResultScreen:
         id: result_screen
         name: 'result_screen'
+
+    FormScreen:
+        id: register_screen
+        name: 'register_screen'
 
 
 
@@ -67,6 +72,10 @@
 
             SecondaryButton:
                 text: "Tambah"
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.transition.duration = .5
+                    root.manager.current = "register_screen"
 
             PrimaryButton:
                 text: "Masuk"
@@ -155,6 +164,60 @@
         width: 240
         height: 220
         pos: (root.width - self.width) / 2, (root.height - self.height) / 2
+
+
+<FormScreen>:
+    form_layout: form_layout
+    img: img
+    
+    BoxLayout:
+        orientation: 'horizontal'        
+                
+        RelativeLayout:
+            canvas.before:
+                Color:
+                    rgb: utils.get_color_from_hex('#2026A1')
+                Rectangle:
+                    pos: 0, 0
+                    size: self.size
+
+            DisplayText:
+                id: heading_text
+                text: "Heading"
+                halign: 'left'
+                text_size: self.parent.width - 100, None
+                pos: 80, self.parent.height / 2 + 20
+
+            SubheadingText:
+                id: subheading_text
+                text: "Subheading"
+                halign: 'left'
+                text_size: self.parent.width - 100, None
+                pos: 80, self.parent.height / 2 - 20
+
+            Image:
+                id: img
+                pos: 0, 0
+                
+
+        RelativeLayout:
+            id: form_layout
+            canvas.before:
+                Color:
+                    rgb: utils.get_color_from_hex('#FFFFFF')
+                Rectangle:
+                    pos: 0, 0
+                    size: self.size
+
+            PrimaryButton:
+                text: "Submit"
+                size_hint: None, None
+                size: self.parent.width - 80, 60
+                pos: 40, 40
+                on_release:
+                    root.load_content(form_layout)
+
+
 
 
 <CustButton@Button>:

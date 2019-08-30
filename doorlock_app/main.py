@@ -3,6 +3,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
+from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.widget import Widget
 from kivy.clock import Clock
@@ -21,10 +22,17 @@ Builder.load_file("kv/main.kv")
 class FrontScreen(Screen):
     pass
 
+class FormScreen(Screen):
+    def load_content(self, form_layout):
+        for but in range(2):
+            form_layout.add_widget(TextInput(
+                                text=str(but), size_hint=(1, None), pos=(0, but * 100 + 180)))
+
 class ScreenManagement(ScreenManager):
     front_screen = ObjectProperty(None)
     scan_screen = ObjectProperty(None)
     result_screen = ObjectProperty(None)
+    register_screen = ObjectProperty(None)
 
 class MainApp(App):
     frame_status = "pre" # ['pre', 'on', 'post']
