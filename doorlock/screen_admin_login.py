@@ -36,6 +36,8 @@ class AdminLoginScreen(tk.Frame):
         self.username_form.pack()
         password_lbl.pack()
         self.password_form.pack()
+
+        self.update_info('Register User', 'Silahkan login dengan Admin terlebih dahulu')
         
         submit_btn = ttk.Button(form_container, text="Login", # style='W.TButton',
                             command=lambda: self.submit_click())

@@ -82,7 +82,7 @@ class ScanScreen(tk.Frame):
                     if self.frame_idx == self.POST_FRAME:
                         self.frame_idx = 0
                         self.frame_status = 'pre'
-                        self.switch_screen(self.app, "result")
+                        self.switch_screen("result")
                         # self.root.current = 'result_screen'                     
                         # self.root.scan_screen.reset()
                     else:

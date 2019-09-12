@@ -49,8 +49,15 @@ class RegistrationScreen(tk.Frame):
         
         submit_btn = ttk.Button(form_container, text="Register", # style='W.TButton',
                             command=lambda: self.submit_click())
+
+
+        home_btn = ttk.Button(form_container, text="Back to Home", # style='W.TButton',
+                            command=lambda: app.show_frame("home"))
                             
         submit_btn.pack()
+        home_btn.pack()
+
+        self.update_info('Register User', 'Silahkan masukkan profile anda.')
 
         self.app = app
 
