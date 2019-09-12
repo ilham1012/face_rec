@@ -7,11 +7,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, auc, cohen_kappa_score, f1_score, precision_score, recall_score
 import joblib
+import hashlib
 
 from utils import constant, util
 
 class RegisterFace():
     NEW_DATA = 125
+    ACC_THRESHOLD = .95
 
     prev_train_dataset = None
     new_train_dataset = None
@@ -21,8 +23,9 @@ class RegisterFace():
     username = None
     face_encodings = []
 
-    def __init__(self, username):
+    def __init__(self, username, users_df):
         self.username = username
+        self.users_df = users_df
         self.prev_train_dataset = util.load_data('doorlock_app/dataset/face_encodings__train.csv')
         self.prev_test_dataset = util.load_data('doorlock_app/dataset/face_encodings__test.csv')
     
@@ -48,12 +51,17 @@ class RegisterFace():
         # Split Feature and Label for training
         X_train, X_test, y_train, y_test = util.split_xy_train_test(self.new_train_dataset, self.new_test_dataset)
         # Train model with new data
-        clf = self.train_new_data(X_train, X_test, y_train, y_test)
-        # Save new datasets (overwrite)
-        self.new_train_dataset.to_csv(r'doorlock_app/dataset/face_encodings__train_.csv', index=False)
-        self.new_test_dataset.to_csv(r'doorlock_app/dataset/face_encodings__test_.csv', index=False)
-        # Save model (overwrite)
-        joblib.dump(clf, 'doorlock_app/dataset/model_.pkl')
+        clf, acc_score = self.train_new_data(X_train, X_test, y_train, y_test)
+
+        if (acc_score > self.ACC_THRESHOLD):
+            # Save new datasets (overwrite)
+            self.new_train_dataset.to_csv(r'doorlock_app/dataset/face_encodings__train_.csv', index=False)
+            self.new_test_dataset.to_csv(r'doorlock_app/dataset/face_encodings__test_.csv', index=False)
+            # Save model (overwrite)
+            joblib.dump(clf, 'doorlock_app/dataset/model_.pkl')
+        else:
+            # GO BACK 
+            print("acc < threshold")
 
     def train_new_data(self, X_train, X_test, y_train, y_test):
         params = {"C": 36.77783910335444, "kernel":"rbf", "degree": 8, "gamma": 1.7575790771023974}
@@ -65,18 +73,24 @@ class RegisterFace():
 
         y_pred = clf.predict(X_test.values)
         cm = confusion_matrix(y_test.values, y_pred)
-        self.print_testing(cm, y_pred, y_test)
+        acc_score = self.model_testing(cm, y_pred, y_test)
 
-        return clf
+        return (clf, acc_score)
 
-    def print_testing(self, cm, y_pred, y_test):
+    def model_testing(self, cm, y_pred, y_test):
+        acc_score = accuracy_score(y_test.values, y_pred)
         print(cm)
         print(classification_report(y_test.values, y_pred))
-        print('accuracy_score ', accuracy_score(y_test.values, y_pred))
+        print('accuracy_score ', acc_score)
         print('cohen_kappa_score ', cohen_kappa_score(y_test.values, y_pred))
         print('f1_score ', f1_score(y_test.values, y_pred, average='macro'))
         print('precision_score ', precision_score(y_test.values, y_pred, average='macro'))
         print('recall_score ', recall_score(y_test.values, y_pred, average='macro'))
+        return acc_score
+
+    
+
+    
 
 
     def test(self):
