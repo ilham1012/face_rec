@@ -28,6 +28,7 @@ MEDIUM_FONT = ("Times New Roman", 16)
 class App(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+        self.on_jetson = False
         # init camera
         self.video_stream = VideoStream(usePiCamera=False).start()
         self.users_df  = pd.read_csv(r'doorlock/users.csv')
