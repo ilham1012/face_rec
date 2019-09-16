@@ -20,9 +20,9 @@ from doorlock.screen_scan import ScanScreen
 from doorlock.screen_result import ResultScreen
 from doorlock.screen_admin_login import AdminLoginScreen
 from doorlock.screen_registration import RegistrationScreen
+from doorlock.screen_scan_new import ScanNewScreen
+from doorlock.constants import LARGE_FONT, MEDIUM_FONT, DATASET_URL
 
-LARGE_FONT = ("Helvetica", 18)
-MEDIUM_FONT = ("Times New Roman", 16)
 
 
 class App(tk.Tk):
@@ -31,7 +31,7 @@ class App(tk.Tk):
         self.on_jetson = False
         # init camera
         self.video_stream = VideoStream(usePiCamera=False).start()
-        self.users_df  = pd.read_csv(r'doorlock/users.csv')
+        self.users_df  = pd.read_csv(DATASET_URL + 'users.csv')
         # init root frame
         root_frame = tk.Frame(self)
         root_frame.pack(side="top", fill="both", expand=True)
@@ -66,6 +66,10 @@ class App(tk.Tk):
         self.registration_screen = RegistrationScreen(root_frame, self, self.users_df)
         self.screens["registration"] = self.registration_screen
         self.registration_screen.grid(row=0, column=0, sticky="nsew")
+        # scan_new screen
+        self.scan_new_screen = ScanNewScreen(root_frame, self, self.users_df)
+        self.screens["scan_new"] = self.scan_new_screen
+        self.scan_new_screen.grid(row=0, column=0, sticky="nsew")
 
         
         print("SCREENS")

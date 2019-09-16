@@ -9,9 +9,7 @@ import cv2
 
 from utils.util import calc_centroid
 from face_recognizer import FaceRecognizer
-
-LARGE_FONT = ("Helvetica", 18)
-MEDIUM_FONT = ("Times New Roman", 16)
+from doorlock.constants import LARGE_FONT, MEDIUM_FONT, MODEL_URL
 
 class ScanScreen(tk.Frame):
     frame_status = "pre" # ['pre', 'on', 'post']
@@ -25,7 +23,7 @@ class ScanScreen(tk.Frame):
 
     THRESHOLD = 0.85
     RESIZE_FACTOR = 4
-    fr = FaceRecognizer()
+    fr = FaceRecognizer(MODEL_URL + 'model.pkl')
 
     def __init__(self, parent, app):
         tk.Frame.__init__(self, parent)
@@ -69,6 +67,7 @@ class ScanScreen(tk.Frame):
                 # grab the frame from the video stream and resize it to
                 # have a maximum width of 300 pixels
                 self.frame = self.app.video_stream.read()
+                print(self.frame)
                 # self.frame = imutils.resize(self.frame, width=480)
 
                 if (self.frame_status == 'pre'):

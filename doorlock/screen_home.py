@@ -2,9 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from PIL import Image, ImageTk
 
-
-LARGE_FONT = ("Arial", 18)
-MEDIUM_FONT = ("Times New Roman", 16)
+from doorlock.constants import LARGE_FONT, MEDIUM_FONT, ASSETS_URL
 
 
 class HomeScreen(tk.Frame):
@@ -19,7 +17,7 @@ class HomeScreen(tk.Frame):
         label = tk.Label(display_container, text="Start Page", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        image = Image.open("doorlock/home_img.png")
+        image = Image.open(ASSETS_URL + 'img/home_img.png')
         self.img = ImageTk.PhotoImage(image)
 
         home_img = tk.Canvas(display_container, bg="#2026A1", width=363, height=250, bd=0, highlightthickness=0, relief='ridge')

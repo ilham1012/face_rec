@@ -8,9 +8,7 @@ from PIL import ImageTk
 import pandas as pd
 import cv2
 
-
-LARGE_FONT = ("Helvetica", 18)
-MEDIUM_FONT = ("Times New Roman", 16)
+from doorlock.constants import LARGE_FONT, MEDIUM_FONT
 
 class RegistrationScreen(tk.Frame):
     def __init__(self, parent, app, users_df):
@@ -18,6 +16,7 @@ class RegistrationScreen(tk.Frame):
         self.title_txt = tk.StringVar()
         self.subtitle_txt = tk.StringVar()
         self.users_df = users_df
+        self.app = app
 
         display_container = tk.Frame(self, bg="#2026A1")
         form_container = tk.Frame(self, bg="#FFFFFF", height=10)
@@ -74,6 +73,8 @@ class RegistrationScreen(tk.Frame):
                 user = self.create_user(username, fullname, password)
                 print(user)
                 print("capture face")
+                self.app.scan_new_screen.rf.set_data(user)
+                self.app.show_frame("scan_new")
                 
         else:
             self.update_info("Maaf", "Konfirmasi Password tidak sama")

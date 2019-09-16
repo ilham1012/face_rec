@@ -32,16 +32,22 @@ class FaceRecognizer():
         # Set classifier model
         # Models: Decision Tree, SVM, Random Forest, Adaboost
         if (clasifier == constant.MODELS[0]): #dt
-            self.clf = joblib.load('models/dt__2019-07-16_14-08-52.pkl')
+            self.model_file = 'models/dt__2019-07-16_14-08-52.pkl'
         elif (clasifier == constant.MODELS[1]): #svm
-            self.clf = joblib.load('models/svm__2019-07-16_14-09-42.pkl')
+            self.model_file = 'models/svm__2019-07-16_14-09-42.pkl'
         elif (clasifier == constant.MODELS[2]): #rf
-            self.clf = joblib.load('models/rf__2019-07-16_14-10-34.pkl')
+            self.model_file = 'models/rf__2019-07-16_14-10-34.pkl'
         elif (clasifier == constant.MODELS[3]): #Adaboost
-            self.clf = joblib.load('models/ada__2019-07-16_14-11-06.pkl')
+            self.model_file = 'models/ada__2019-07-16_14-11-06.pkl'
+        elif (clasifier == "default"):
+            self.model_file = 'doorlock_app/models/model.pkl'
         else:
-            self.clf = joblib.load('doorlock_app/models/model.pkl')
+            self.model_file = clasifier
 
+        self.load_model()
+
+    def load_model(self):
+        self.clf = joblib.load(self.model_file)
 
 
     def recognize_face(self, rgb_frame, multiface=True, model="hog"):

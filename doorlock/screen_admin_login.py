@@ -7,9 +7,7 @@ from PIL import Image
 from PIL import ImageTk
 import cv2
 
-
-LARGE_FONT = ("Helvetica", 18)
-MEDIUM_FONT = ("Times New Roman", 16)
+from doorlock.constants import LARGE_FONT, MEDIUM_FONT
 
 class AdminLoginScreen(tk.Frame):
     def __init__(self, parent, app):
