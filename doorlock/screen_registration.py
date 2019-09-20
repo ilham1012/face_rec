@@ -32,29 +32,29 @@ class RegistrationScreen(tk.Frame):
         fullname_lbl = tk.Label(form_container, text="Nama Lengkap")
         password_lbl = tk.Label(form_container, text="Password")
         password_conf_lbl = tk.Label(form_container, text="Ulangi Password")
-        self.username_form = tk.Entry(form_container)
-        self.fullname_form = tk.Entry(form_container)
-        self.password_form = tk.Entry(form_container, show="*")
-        self.password_conf_form = tk.Entry(form_container, show="*")
+        self.username_form = ttk.Entry(form_container, width=180)
+        self.fullname_form = ttk.Entry(form_container, width=180)
+        self.password_form = ttk.Entry(form_container, show="*", width=180)
+        self.password_conf_form = ttk.Entry(form_container, show="*", width=180)
         
-        username_lbl.pack()
-        self.username_form.pack()
-        fullname_lbl.pack()
-        self.fullname_form.pack()
-        password_lbl.pack()
-        self.password_form.pack()
-        password_conf_lbl.pack()
-        self.password_conf_form.pack()
+        username_lbl.pack(padx=20, pady=(20, 0))
+        self.username_form.pack(padx=20, pady=10)
+        fullname_lbl.pack(padx=20, pady=(10, 0))
+        self.fullname_form.pack(padx=20, pady=10)
+        password_lbl.pack(padx=20, pady=(10, 0))
+        self.password_form.pack(padx=20, pady=10)
+        password_conf_lbl.pack(padx=20, pady=(10, 0))
+        self.password_conf_form.pack(padx=20, pady=10)
         
-        submit_btn = ttk.Button(form_container, text="Register", # style='W.TButton',
+        submit_btn = ttk.Button(form_container, text="Register", width=180, style='P.TButton',
                             command=lambda: self.submit_click())
 
 
-        home_btn = ttk.Button(form_container, text="Back to Home", # style='W.TButton',
+        home_btn = ttk.Button(form_container, text="Back to Home", width=180, # style='W.TButton',
                             command=lambda: app.show_frame("home"))
                             
-        submit_btn.pack()
-        home_btn.pack()
+        submit_btn.pack(padx=20, pady=10)
+        home_btn.pack(padx=20, pady=10)
 
         self.update_info('Register User', 'Silahkan masukkan profile anda.')
 

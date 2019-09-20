@@ -18,10 +18,11 @@ from face_recognizer import FaceRecognizer
 from doorlock.screen_home import HomeScreen
 from doorlock.screen_scan import ScanScreen
 from doorlock.screen_result import ResultScreen
-from doorlock.screen_admin_login import AdminLoginScreen
+from doorlock.screen_login import LoginScreen
 from doorlock.screen_registration import RegistrationScreen
 from doorlock.screen_scan_new import ScanNewScreen
 from doorlock.constants import LARGE_FONT, MEDIUM_FONT, DATASET_URL
+from doorlock.styles import init_style
 
 
 
@@ -29,6 +30,7 @@ class App(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.on_jetson = False
+        init_style()
         # init camera
         self.video_stream = VideoStream(usePiCamera=False).start()
         self.users_df  = pd.read_csv(DATASET_URL + 'users.csv')
@@ -58,10 +60,10 @@ class App(tk.Tk):
         self.result_screen = ResultScreen(root_frame, self)
         self.screens["result"] = self.result_screen
         self.result_screen.grid(row=0, column=0, sticky="nsew")
-        # admin login screen
-        self.admin_login_screen = AdminLoginScreen(root_frame, self)
-        self.screens["admin_login"] = self.admin_login_screen
-        self.admin_login_screen.grid(row=0, column=0, sticky="nsew")
+        # login screen
+        self.login_screen = LoginScreen(root_frame, self)
+        self.screens["login"] = self.login_screen
+        self.login_screen.grid(row=0, column=0, sticky="nsew")
         # registration screen
         self.registration_screen = RegistrationScreen(root_frame, self, self.users_df)
         self.screens["registration"] = self.registration_screen

@@ -9,14 +9,14 @@ import cv2
 
 from doorlock.constants import LARGE_FONT, MEDIUM_FONT
 
-class AdminLoginScreen(tk.Frame):
+class LoginScreen(tk.Frame):
     def __init__(self, parent, app):
         tk.Frame.__init__(self, parent)
         self.title_txt = tk.StringVar()
         self.subtitle_txt = tk.StringVar()
 
         display_container = tk.Frame(self, bg="#2026A1")
-        form_container = tk.Frame(self, bg="#FFFFFF", height=10)
+        form_container = tk.Frame(self, bg="#FFFFFF")
         display_container.pack(side=tk.LEFT, fill="both", expand=True)
         form_container.pack(side=tk.RIGHT, fill="both")
 
@@ -27,20 +27,24 @@ class AdminLoginScreen(tk.Frame):
         
         username_lbl = tk.Label(form_container, text="Username")
         password_lbl = tk.Label(form_container, text="Password")
-        self.username_form = tk.Entry(form_container)
-        self.password_form = tk.Entry(form_container, show="*")
+        self.username_form = ttk.Entry(form_container, width=180)
+        self.password_form = ttk.Entry(form_container, show="*", width=180)
         
-        username_lbl.pack()
-        self.username_form.pack()
-        password_lbl.pack()
-        self.password_form.pack()
+        username_lbl.pack(padx=20, pady=(20,0), fill=tk.X)
+        self.username_form.pack(padx=20, pady=10)
+        password_lbl.pack(padx=20, pady=(10,0), fill=tk.X)
+        self.password_form.pack(padx=20, pady=10)
 
         self.update_info('Register User', 'Silahkan login dengan Admin terlebih dahulu')
         
-        submit_btn = ttk.Button(form_container, text="Login", # style='W.TButton',
+        submit_btn = ttk.Button(form_container, text="Login", width=180, style='P.TButton',
                             command=lambda: self.submit_click())
                             
-        submit_btn.pack()
+        home_btn = ttk.Button(form_container, text="Back to Home", width=180,
+                            command=lambda: app.show_frame("home"))
+                            
+        submit_btn.pack(padx=20, pady=10)
+        home_btn.pack(padx=20, pady=10)
 
         self.app = app
 
