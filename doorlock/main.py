@@ -19,6 +19,7 @@ from doorlock.screen_home import HomeScreen
 from doorlock.screen_scan import ScanScreen
 from doorlock.screen_result import ResultScreen
 from doorlock.screen_login import LoginScreen
+from doorlock.screen_admin_login import AdminLoginScreen
 from doorlock.screen_registration import RegistrationScreen
 from doorlock.screen_scan_new import ScanNewScreen
 from doorlock.constants import LARGE_FONT, MEDIUM_FONT, DATASET_URL
@@ -60,6 +61,10 @@ class App(tk.Tk):
         self.result_screen = ResultScreen(root_frame, self)
         self.screens["result"] = self.result_screen
         self.result_screen.grid(row=0, column=0, sticky="nsew")
+        # admin login screen
+        self.admin_login_screen = AdminLoginScreen(root_frame, self)
+        self.screens["admin_login"] = self.admin_login_screen
+        self.admin_login_screen.grid(row=0, column=0, sticky="nsew")
         # login screen
         self.login_screen = LoginScreen(root_frame, self)
         self.screens["login"] = self.login_screen

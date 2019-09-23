@@ -3,13 +3,15 @@ import threading
 from PIL import Image
 from PIL import ImageTk
 import tkinter as tk
+import tkinter.ttk as ttk
 import imutils
 from imutils.video import VideoStream
 import cv2
 
 from utils.util import calc_centroid
 from face_recognizer import FaceRecognizer
-from doorlock.constants import LARGE_FONT, MEDIUM_FONT, MODEL_URL
+from doorlock.constants import LARGE_FONT, MEDIUM_FONT, MODEL_URL, ASSETS_URL
+from doorlock.styles import colors
 
 class ScanScreen(tk.Frame):
     frame_status = "pre" # ['pre', 'on', 'post']
@@ -32,14 +34,16 @@ class ScanScreen(tk.Frame):
         self.stopEvent = None
         self.app = app
 
-        self.panel = tk.Label(self)
+        self['bg'] = colors['navy']
+
+        self.panel = tk.Label(self, bd=0, highlightthickness=0)
         self.panel.place(relx=0.5, rely=0, anchor=tk.N)
 
-        label = tk.Label(self, text="Page Two", font=LARGE_FONT)
-        label.place()
+        label = ttk.Label(self, text="Scan Face", style='Title.TLabel')
+        label.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
 
-        button1 = tk.Button(self, text="Back to Home",
-                            command=lambda: self.switch_screen("home"))
+        button1 = ttk.Button(self, text="Emergency",
+                            command=lambda: self.switch_screen("login"))
 
         button1.place(relx=0.5, rely=0.9, anchor=tk.CENTER)
 

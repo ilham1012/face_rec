@@ -8,7 +8,9 @@ from PIL import ImageTk
 import pandas as pd
 import cv2
 
-from doorlock.constants import LARGE_FONT, MEDIUM_FONT
+from doorlock.constants import LARGE_FONT, MEDIUM_FONT, ASSETS_URL
+from doorlock.styles import colors
+
 
 class RegistrationScreen(tk.Frame):
     def __init__(self, parent, app, users_df):
@@ -18,39 +20,49 @@ class RegistrationScreen(tk.Frame):
         self.users_df = users_df
         self.app = app
 
-        display_container = tk.Frame(self, bg="#2026A1")
-        form_container = tk.Frame(self, bg="#FFFFFF", height=10)
+        display_container = tk.Frame(self, bg=colors['navy'])
+        form_container = tk.Frame(self, bg=colors['white'], height=10)
         display_container.pack(side=tk.LEFT, fill="both", expand=True)
         form_container.pack(side=tk.RIGHT, fill="both")
 
-        self.title = tk.Label(display_container, textvariable=self.title_txt, font=LARGE_FONT)
-        self.subtitle = tk.Label(display_container, textvariable=self.subtitle_txt, font=MEDIUM_FONT)
-        self.title.pack(pady=10, padx=10)
-        self.subtitle.pack(pady=10, padx=10)
+        self.title = ttk.Label(display_container, textvariable=self.title_txt, style='Display.TLabel')
+        self.subtitle = ttk.Label(display_container, textvariable=self.subtitle_txt, style='Subtitle.TLabel')
+
+        self.title.place(anchor=tk.SW, relx=0.075, rely=0.4)
+        self.subtitle.place(anchor=tk.SW, relx=0.075, rely=0.5)
+
+        image = Image.open(ASSETS_URL + 'img/register_img.png')
+        self.img = ImageTk.PhotoImage(image)
+
+        display_img = tk.Canvas(display_container, bg=colors['navy'], width=236, height=216, bd=0, highlightthickness=0, relief='ridge')
+        display_img.place(relx=.5, rely=1, anchor=tk.S)
+        display_img.create_image(118, 108, image=self.img)
+
+        self.update_info('Register User', 'Silahkan login dengan Admin terlebih dahulu')
         
-        username_lbl = tk.Label(form_container, text="Username")
+        username_lbl = tk.Label(form_container, text="Username", justify=tk.LEFT)
         fullname_lbl = tk.Label(form_container, text="Nama Lengkap")
         password_lbl = tk.Label(form_container, text="Password")
         password_conf_lbl = tk.Label(form_container, text="Ulangi Password")
-        self.username_form = ttk.Entry(form_container, width=180)
-        self.fullname_form = ttk.Entry(form_container, width=180)
-        self.password_form = ttk.Entry(form_container, show="*", width=180)
-        self.password_conf_form = ttk.Entry(form_container, show="*", width=180)
+        self.username_form = ttk.Entry(form_container, font=('Arial', 12), width=40)
+        self.fullname_form = ttk.Entry(form_container, font=('Arial', 12), width=40)
+        self.password_form = ttk.Entry(form_container, show="*", font=('Arial', 12), width=40)
+        self.password_conf_form = ttk.Entry(form_container, show="*", font=('Arial', 12), width=40)
         
-        username_lbl.pack(padx=20, pady=(20, 0))
+        username_lbl.pack(padx=20, pady=(20, 0), fill=tk.X)
         self.username_form.pack(padx=20, pady=10)
-        fullname_lbl.pack(padx=20, pady=(10, 0))
+        fullname_lbl.pack(padx=20, pady=(10, 0), fill=tk.X)
         self.fullname_form.pack(padx=20, pady=10)
-        password_lbl.pack(padx=20, pady=(10, 0))
+        password_lbl.pack(padx=20, pady=(10, 0), fill=tk.X)
         self.password_form.pack(padx=20, pady=10)
-        password_conf_lbl.pack(padx=20, pady=(10, 0))
+        password_conf_lbl.pack(padx=20, pady=(10, 0), fill=tk.X)
         self.password_conf_form.pack(padx=20, pady=10)
         
-        submit_btn = ttk.Button(form_container, text="Register", width=180, style='P.TButton',
+        submit_btn = ttk.Button(form_container, text="Register", width=32, style='P.TButton',
                             command=lambda: self.submit_click())
 
 
-        home_btn = ttk.Button(form_container, text="Back to Home", width=180, # style='W.TButton',
+        home_btn = ttk.Button(form_container, text="Back to Home", width=32, # style='W.TButton',
                             command=lambda: app.show_frame("home"))
                             
         submit_btn.pack(padx=20, pady=10)

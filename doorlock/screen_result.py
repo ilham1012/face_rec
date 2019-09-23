@@ -1,14 +1,14 @@
 import time
 
 import tkinter as tk
+import tkinter.ttk as ttk
 from PIL import Image
 from PIL import ImageTk
 import cv2
 # import RPi.GPIO as GPIO
 
-
-LARGE_FONT = ("Helvetica", 18)
-MEDIUM_FONT = ("Times New Roman", 16)
+from doorlock.constants import ASSETS_URL
+from doorlock.styles import colors
 
 class ResultScreen(tk.Frame):
     output_pin = 18
@@ -16,17 +16,19 @@ class ResultScreen(tk.Frame):
     def __init__(self, parent, app):
         tk.Frame.__init__(self, parent)
 
+        self['bg'] = colors['navy']
+
         self.GPIO_init()
 
         self.title_txt = tk.StringVar()
         self.subtitle_txt = tk.StringVar()
 
-        self.title = tk.Label(self, textvariable=self.title_txt, font=LARGE_FONT)
-        self.subtitle = tk.Label(self, textvariable=self.subtitle_txt, font=MEDIUM_FONT)
+        self.title = ttk.Label(self, textvariable=self.title_txt, style='Title.TLabel')
+        self.subtitle = ttk.Label(self, textvariable=self.subtitle_txt, style='Subtitle.TLabel')
         self.title.pack(pady=10, padx=10)
         self.subtitle.pack(pady=10, padx=10)
         
-        self.panel = tk.Label(self)
+        self.panel = tk.Label(self, bd=0, highlightthickness=0)
         self.panel.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         self.app = app

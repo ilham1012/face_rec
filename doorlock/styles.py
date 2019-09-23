@@ -61,3 +61,22 @@ def init_style():
     style.map('TEntry',
                         background=[('active', colors['white_broken']), ('focus', colors['white_broken'])],
                         fieldbackground=[('active', colors['white_broken']), ('focus', colors['white_broken'])],)
+
+    style.configure('TLabel',
+                        font=('Arial', 12))
+    
+    style.configure('Display.TLabel',
+                        font=('Arial', 36, 'bold'),
+                        background=colors['navy'],
+                        foreground=colors['white'])
+    
+    style.configure('Title.TLabel',
+                        font=('Arial', 24),
+                        background=colors['navy'],
+                        foreground=colors['white'])
+
+    style.configure('Subtitle.TLabel',
+                        font=('Arial', 18),
+                        background=colors['navy'],
+                        foreground=colors['white'])
+                        
