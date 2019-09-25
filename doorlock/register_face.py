@@ -68,7 +68,7 @@ class RegisterFace():
             # Save model (overwrite)
             joblib.dump(clf, MODEL_URL + 'model_.pkl')
             self.users_df = pd.concat([self.users_df, self.user_df], ignore_index=True)
-            self.users_df.to_csv(DATASET_URL + 'users.csv')
+            self.users_df.to_csv(DATASET_URL + 'users.csv', index=False)
             ret = True
         else:
             # GO BACK 

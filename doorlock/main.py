@@ -84,8 +84,12 @@ class App(tk.Tk):
 
     def show_frame(self, screen_class):
         screen = self.screens[screen_class]
-        # print(screen)
+            
+        if(screen_class == "result"):
+            print(screen)
+            
         screen.tkraise()
+        screen.update()
         screen.show_screen()
 
     def on_close(self):

@@ -60,9 +60,10 @@ class LoginScreen(tk.Frame):
 
     def submit_click(self):
         self.account_check(self.username_form.get(), self.password_form.get())
+        self.reset_form()
 
     def show_screen(self):
-        print("admin login")
+        print("[SHOW SCREEN] Login")
 
     def account_check(self, username, password):
         user_query = self.app.users_df[self.app.users_df.username == username]
@@ -71,6 +72,7 @@ class LoginScreen(tk.Frame):
             if (self.check_pwd(username, password)):
                 print("selamat Datang")
                 print("Username: " + username)
+                self.app.result_screen.update_info(username, 0, mode=1)
                 self.app.show_frame("result")
             else:
                 self.update_info('Maaf', 'Username tidak terdaftar atau Password salah')
@@ -83,6 +85,10 @@ class LoginScreen(tk.Frame):
 
         self.title_txt.set(txt_title)
         self.subtitle_txt.set(txt_subtitle)
+
+    def reset_form(self):
+        self.username_form.delete(0, tk.END)
+        self.password_form.delete(0, tk.END)
 
     def check_pwd(self, username, pwd):
         ret = False
