@@ -16,8 +16,8 @@ class LoginScreen(tk.Frame):
         self.title_txt = tk.StringVar()
         self.subtitle_txt = tk.StringVar()
 
-        display_container = tk.Frame(self, bg="#2026A1")
-        form_container = tk.Frame(self, bg="#FFFFFF")
+        display_container = tk.Frame(self, bg=colors['navy'])
+        form_container = tk.Frame(self, bg=colors['white'])
         display_container.pack(side=tk.LEFT, fill="both", expand=True)
         form_container.pack(side=tk.RIGHT, fill="both")
 
@@ -25,7 +25,7 @@ class LoginScreen(tk.Frame):
         self.subtitle = ttk.Label(display_container, textvariable=self.subtitle_txt, style='Subtitle.TLabel')
 
         self.title.place(anchor=tk.SW, relx=0.075, rely=0.4)
-        self.subtitle.place(anchor=tk.SW, relx=0.075, rely=0.5)
+        self.subtitle.place(anchor=tk.SW, relx=0.075, rely=0.45)
 
         image = Image.open(ASSETS_URL + 'img/register_img.png')
         self.img = ImageTk.PhotoImage(image)
@@ -36,25 +36,25 @@ class LoginScreen(tk.Frame):
 
         self.update_info('Register User', 'Silahkan login dengan Admin terlebih dahulu')
         
-        username_lbl = tk.Label(form_container, text="Username")
-        password_lbl = tk.Label(form_container, text="Password")
+        username_lbl = tk.Label(form_container, text="Username", background=colors['white'])
+        password_lbl = tk.Label(form_container, text="Password", background=colors['white'])
         self.username_form = ttk.Entry(form_container, font=('Arial', 12), width=40)
         self.password_form = ttk.Entry(form_container, show="*", font=('Arial', 12), width=40)
         
-        username_lbl.pack(padx=20, pady=(20,0), fill=tk.X)
-        self.username_form.pack(padx=20, pady=10)
-        password_lbl.pack(padx=20, pady=(10,0), fill=tk.X)
-        self.password_form.pack(padx=20, pady=10)
+        username_lbl.pack(padx=20, pady=(20,0), anchor=tk.SW)
+        self.username_form.pack(padx=20, pady=0)
+        password_lbl.pack(padx=20, pady=(10,0), anchor=tk.SW)
+        self.password_form.pack(padx=20, pady=0)
 
         
-        submit_btn = ttk.Button(form_container, text="Login", width=31, style='P.TButton',
+        submit_btn = ttk.Button(form_container, text="Login", width=38, style='P.TButton',
                             command=lambda: self.submit_click())
                             
-        home_btn = ttk.Button(form_container, text="Back to Home", width=31,
+        home_btn = ttk.Button(form_container, text="Back to Home", width=38,
                             command=lambda: app.show_frame("home"))
                             
-        submit_btn.pack(padx=20, pady=10)
-        home_btn.pack(padx=20, pady=10)
+        submit_btn.pack(padx=20, pady=(20, 0))
+        home_btn.pack(padx=20, pady=(10, 0))
 
         self.app = app
 

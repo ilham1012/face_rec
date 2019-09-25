@@ -29,7 +29,7 @@ class RegistrationScreen(tk.Frame):
         self.subtitle = ttk.Label(display_container, textvariable=self.subtitle_txt, style='Subtitle.TLabel')
 
         self.title.place(anchor=tk.SW, relx=0.075, rely=0.4)
-        self.subtitle.place(anchor=tk.SW, relx=0.075, rely=0.5)
+        self.subtitle.place(anchor=tk.SW, relx=0.075, rely=0.45)
 
         image = Image.open(ASSETS_URL + 'img/register_img.png')
         self.img = ImageTk.PhotoImage(image)
@@ -40,33 +40,33 @@ class RegistrationScreen(tk.Frame):
 
         self.update_info('Register User', 'Silahkan login dengan Admin terlebih dahulu')
         
-        username_lbl = tk.Label(form_container, text="Username", justify=tk.LEFT)
-        fullname_lbl = tk.Label(form_container, text="Nama Lengkap")
-        password_lbl = tk.Label(form_container, text="Password")
-        password_conf_lbl = tk.Label(form_container, text="Ulangi Password")
+        username_lbl = tk.Label(form_container, text="Username", background=colors['white'])
+        fullname_lbl = tk.Label(form_container, text="Nama Lengkap", background=colors['white'])
+        password_lbl = tk.Label(form_container, text="Password", background=colors['white'])
+        password_conf_lbl = tk.Label(form_container, text="Ulangi Password", background=colors['white'])
         self.username_form = ttk.Entry(form_container, font=('Arial', 12), width=40)
         self.fullname_form = ttk.Entry(form_container, font=('Arial', 12), width=40)
         self.password_form = ttk.Entry(form_container, show="*", font=('Arial', 12), width=40)
         self.password_conf_form = ttk.Entry(form_container, show="*", font=('Arial', 12), width=40)
         
-        username_lbl.pack(padx=20, pady=(20, 0), fill=tk.X)
-        self.username_form.pack(padx=20, pady=10)
-        fullname_lbl.pack(padx=20, pady=(10, 0), fill=tk.X)
-        self.fullname_form.pack(padx=20, pady=10)
-        password_lbl.pack(padx=20, pady=(10, 0), fill=tk.X)
-        self.password_form.pack(padx=20, pady=10)
-        password_conf_lbl.pack(padx=20, pady=(10, 0), fill=tk.X)
-        self.password_conf_form.pack(padx=20, pady=10)
+        username_lbl.pack(padx=20, pady=(20, 0), anchor=tk.SW)
+        self.username_form.pack(padx=20, pady=0)
+        fullname_lbl.pack(padx=20, pady=(10, 0), anchor=tk.SW)
+        self.fullname_form.pack(padx=20, pady=0)
+        password_lbl.pack(padx=20, pady=(10, 0), anchor=tk.SW)
+        self.password_form.pack(padx=20, pady=0)
+        password_conf_lbl.pack(padx=20, pady=(10, 0), anchor=tk.SW)
+        self.password_conf_form.pack(padx=20, pady=0)
         
-        submit_btn = ttk.Button(form_container, text="Register", width=32, style='P.TButton',
+        submit_btn = ttk.Button(form_container, text="Register", width=38, style='P.TButton',
                             command=lambda: self.submit_click())
 
 
-        home_btn = ttk.Button(form_container, text="Back to Home", width=32, # style='W.TButton',
+        home_btn = ttk.Button(form_container, text="Back to Home", width=38, # style='W.TButton',
                             command=lambda: app.show_frame("home"))
                             
-        submit_btn.pack(padx=20, pady=10)
-        home_btn.pack(padx=20, pady=10)
+        submit_btn.pack(padx=20, pady=(20, 0))
+        home_btn.pack(padx=20, pady=(10, 0))
 
         self.update_info('Register User', 'Silahkan masukkan profile anda.')
 

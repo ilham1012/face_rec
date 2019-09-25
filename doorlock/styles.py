@@ -1,14 +1,5 @@
 import tkinter.ttk as ttk
 
-# color_blue          = '#2B44FF'
-# color_navy          = '#2026A1'
-# color_navy_dark     = '#1E2FB1'
-# color_white         = '#FFFFFF'
-# color_white_broken  = '#F1F1F2'
-# color_grey_light    = '#ECECED'
-# color_grey_mid      = '#999999'
-# color_grey_dark     = '#333333'
-
 colors = {
     'blue'          : '#2B44FF',
     'navy'          : '#2026A1',
@@ -52,7 +43,7 @@ def init_style():
     
     style.configure('TEntry',
                         font=('Arial', 12),
-                        padding=10,
+                        padding=7,
                         background=colors['grey_light'],
                         fieldbackground=colors['grey_light'],
                         foreground=colors['grey_dark'],
@@ -66,17 +57,22 @@ def init_style():
                         font=('Arial', 12))
     
     style.configure('Display.TLabel',
-                        font=('Arial', 36, 'bold'),
+                        font=('Arial', 24, 'bold'),
                         background=colors['navy'],
                         foreground=colors['white'])
     
     style.configure('Title.TLabel',
-                        font=('Arial', 24),
+                        font=('Arial', 16),
+                        background=colors['navy'],
+                        foreground=colors['white'])
+
+    style.configure('TitleB.TLabel',
+                        font=('Arial', 16, 'bold'),
                         background=colors['navy'],
                         foreground=colors['white'])
 
     style.configure('Subtitle.TLabel',
-                        font=('Arial', 18),
+                        font=('Arial', 12),
                         background=colors['navy'],
                         foreground=colors['white'])
                         

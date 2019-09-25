@@ -17,8 +17,8 @@ class HomeScreen(tk.Frame):
         label_title = ttk.Label(display_container, style='Display.TLabel', text="Halo!")
         label_subtitle = ttk.Label(display_container, style='Subtitle.TLabel', text="Saat ini ada 3 orang di Lab")
 
-        label_title.place(relx=0.075, rely=0.45, anchor=tk.SW)
-        label_subtitle.place(relx=0.075, rely=0.55, anchor=tk.SW)
+        label_title.place(relx=0.075, rely=0.55, anchor=tk.SW)
+        label_subtitle.place(relx=0.075, rely=0.6, anchor=tk.SW)
 
         image = Image.open(ASSETS_URL + 'img/home_img.png')
         self.img = ImageTk.PhotoImage(image)

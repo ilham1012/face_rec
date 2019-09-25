@@ -25,14 +25,14 @@ class ResultScreen(tk.Frame):
         self.sub_up_txt = tk.StringVar()
         self.sub_down_txt = tk.StringVar()
 
-        self.title_up = ttk.Label(self, textvariable=self.title_up_txt, style='Title.TLabel')
-        self.title_down = ttk.Label(self, textvariable=self.title_down_txt, style='Title.TLabel')
+        self.title_up = ttk.Label(self, textvariable=self.title_up_txt, style='TitleB.TLabel')
+        self.title_down = ttk.Label(self, textvariable=self.title_down_txt, style='TitleB.TLabel')
         self.sub_up = ttk.Label(self, textvariable=self.sub_up_txt, style='Subtitle.TLabel')
         self.sub_down = ttk.Label(self, textvariable=self.sub_down_txt, style='Subtitle.TLabel')
         
-        self.sub_up.place(relx=.5, rely=0.1, anchor=tk.S)
-        self.title_up.place(relx=.5, rely=0.15, anchor=tk.S)
-        self.title_down.place(relx=.5, rely=0.8, anchor=tk.S)
+        self.sub_up.place(relx=.5, rely=0.15, anchor=tk.S)
+        self.title_up.place(relx=.5, rely=0.215, anchor=tk.S)
+        self.title_down.place(relx=.5, rely=0.785, anchor=tk.S)
         self.sub_down.place(relx=.5, rely=0.85, anchor=tk.S)
         
         self.panel = tk.Label(self, bd=0, highlightthickness=0)
