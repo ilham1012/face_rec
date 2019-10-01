@@ -40,6 +40,18 @@ def init_style():
     style.map('P.TButton',
                         background=[('active', colors['navy']), ('pressed', colors['navy_dark'])],
                         foreground=[('active', colors['white_broken']), ('pressed', colors['white'])])
+
+    style.configure('S.TButton',
+                        font=('PT Sans Caption', 8, 'bold'),
+                        padding=8,
+                        background=colors['navy'],
+                        foreground=colors['white'],
+                        borderwidth=0,
+                        highlightthickness=0)
+
+    style.map('S.TButton',
+                        background=[('active', colors['blue']), ('pressed', colors['navy_dark'])],
+                        foreground=[('active', colors['white_broken']), ('pressed', colors['white'])])
     
     style.configure('TEntry',
                         font=('PT Sans Caption', 12),

@@ -53,11 +53,13 @@ class ResultScreen(tk.Frame):
             #     print("GPIO.HIGH")
             #     GPIO.output(self.output_pin, GPIO.HIGH)
             #     print("Sleep")
-        time.sleep(2)
+            #     time.sleep(2)
             #     print("GPIO.LOW")
             #     GPIO.output(self.output_pin, GPIO.LOW)
             # finally:
             #     GPIO.cleanup()
+        # else:
+        time.sleep(2)
         self.reset()
         self.app.show_frame("home")
 
@@ -103,7 +105,7 @@ class ResultScreen(tk.Frame):
         self.sub_down_txt.set(txt_sub_down)
 
         if (img == []):
-            image = Image.open(ASSETS_URL + 'img/fallback_img.png')
+            image = Image.open(ASSETS_URL + 'img/face_fallback.png')
         else:
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             image = Image.fromarray(image)

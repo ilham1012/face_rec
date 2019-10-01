@@ -1,6 +1,10 @@
+import time
+# from os import system
+
 import tkinter as tk
 import tkinter.ttk as ttk
 from PIL import Image, ImageTk
+# import RPi.GPIO as GPIO
 
 from doorlock.constants import LARGE_FONT, MEDIUM_FONT, ASSETS_URL
 from doorlock.styles import colors
@@ -27,15 +31,59 @@ class HomeScreen(tk.Frame):
         home_img.place(relx=.95, rely=.95, anchor=tk.SE)
         home_img.create_image(181, 125, image=self.img)
 
-        button1 = ttk.Button(button_container, text="Daftar", style='TButton',
-                            command=lambda: app.show_frame("admin_login"))
+        hamburger_img = Image.open(ASSETS_URL + 'img/hamburger.png')
+        self.menu_img = ImageTk.PhotoImage(hamburger_img)
+
+        button1 = ttk.Button(button_container, text="Bunyikan Bel", style='TButton',
+                            command=lambda: self.ring_the_bell())
         button2 = ttk.Button(button_container, text="Masuk", style='P.TButton',
                             command=lambda: app.show_frame("scan"))
+        button3 = ttk.Button(display_container, image=self.menu_img, style='S.TButton',
+                            command=lambda: app.show_frame("admin_login"))
         
         button1.configure()
         button2.configure()
+        button3.configure()
+
         button1.pack(side=tk.LEFT, pady=30, padx=50, fill=tk.BOTH, expand=True)
         button2.pack(side=tk.LEFT, pady=30, padx=50, fill=tk.BOTH, expand=True)
 
+        button3.place(relx=0.05, rely=0.05, anchor=tk.NW)
+
     def show_screen(self):
         print("[SHOW SCREEN] Home")
+
+    def ring_the_bell(self):
+        print("[BELL] RIIIIING!")
+        # sound_file = ASSETS_URL + 'sounds/doorbell.mp3'
+        # system("mpg123 " + sound_file)
+        i = 0
+        pitch = [82, 65]
+        duration = [0.2, 0.4]
+
+        for p in pitch:
+            self.buzzer(p, duration[i])
+            time.sleep(duration[i] * 0.5)
+            x+=1
+
+    buzzer_pin = 18
+    # from http://andidinata.com/2017/10/music-dengan-piezo-buzzer/
+    def buzzer(self, pitch, duration):
+        if(pitch==0):
+            time.sleep(duration)
+            return
+
+        period = 1.0/pitch
+        delay=period/2
+        cycles=int(duration*pitch)
+
+        for i in range(cycles):
+            # GPIO.output(self.buzzer_pin,1)
+            # time.sleep(delay)
+            # GPIO.output(self.buzzer_pin,0)
+            # time.sleep(delay)
+
+    def GPIO_init(self):
+        # GPIO.setmode(GPIO.BCM)
+        # GPIO.setup(self.buzzer_pin, GPIO.OUT, initial=0)
+        pass
