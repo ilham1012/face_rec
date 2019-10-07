@@ -51,11 +51,11 @@ class ResultScreen(tk.Frame):
             # self.GPIO_init()
             # try:
             #     print("GPIO.HIGH")
-            #     GPIO.output(self.output_pin, GPIO.HIGH)
+            #     self.app.GPIO.output(self.output_pin, self.app.GPIO.HIGH)
             #     print("Sleep")
             #     time.sleep(2)
             #     print("GPIO.LOW")
-            #     GPIO.output(self.output_pin, GPIO.LOW)
+            #     self.app.GPIO.output(self.output_pin, self.app.GPIO.LOW)
             # finally:
             #     GPIO.cleanup()
         # else:

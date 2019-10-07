@@ -12,6 +12,7 @@ from PIL import ImageTk
 import tkinter as tk
 import imutils
 from imutils.video import VideoStream
+import RPi.GPIO as GPIO
 
 from utils.util import calc_centroid
 from face_recognizer import FaceRecognizer
@@ -46,6 +47,8 @@ class App(tk.Tk):
         self.show_frame("home")
         # set on_close on delete window protocol
         self.wm_protocol("WM_DELETE_WINDOW", self.on_close)
+        self.GPIO = GPIO
+        self.GPIO_init()
 
     def init_screens(self, root_frame):
         self.screens = {}
@@ -95,7 +98,14 @@ class App(tk.Tk):
     def on_close(self):
         self.video_stream.stop()
         print("[INFO] Close App")
+        # GPIO.cleanup()
         self.quit()
+
+    def GPIO_init(self):
+        # GPIO.setmode(GPIO.BCM)
+        # GPIO.setup(self.buzzer_pin, GPIO.OUT, initial=0)
+        # GPIO.setup(self.output_pin, GPIO.OUT, initial=GPIO.LOW)
+        pass
 
 
 app = App()

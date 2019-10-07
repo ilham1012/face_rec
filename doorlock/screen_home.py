@@ -12,6 +12,7 @@ from doorlock.styles import colors
 class HomeScreen(tk.Frame):
     def __init__(self, parent, app):
         tk.Frame.__init__(self, parent)
+        self.app = app
 
         display_container = tk.Frame(self, bg=colors['navy'])
         button_container = tk.Frame(self, bg=colors['white'], height=10)
@@ -78,10 +79,10 @@ class HomeScreen(tk.Frame):
         cycles=int(duration*pitch)
 
         for i in range(cycles):
-            # GPIO.output(self.buzzer_pin,1)
-            # time.sleep(delay)
-            # GPIO.output(self.buzzer_pin,0)
-            # time.sleep(delay)
+            self.app.GPIO.output(self.buzzer_pin,1)
+            time.sleep(delay)
+            self.app.GPIO.output(self.buzzer_pin,0)
+            time.sleep(delay)
 
     def GPIO_init(self):
         # GPIO.setmode(GPIO.BCM)
