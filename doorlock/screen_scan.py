@@ -16,12 +16,14 @@ from doorlock.styles import colors
 class ScanScreen(tk.Frame):
     frame_status = "pre" # ['pre', 'on', 'post']
     frame_idx = 0
+    scan_idx = 0
     name = ""
 
     # Const
     PRE_FRAME = 90
     POST_FRAME = 135
     FRAME_SKIPPING = 30
+    SCAN_TIMEOUT = 300
 
     THRESHOLD = 0.85
     RESIZE_FACTOR = 4
@@ -86,20 +88,25 @@ class ScanScreen(tk.Frame):
                         self.frame_idx = 0
                         self.frame_status = 'pre'
                         self.switch_screen("result")
-                        # self.root.current = 'result_screen'                     
-                        # self.root.scan_screen.reset()
                     else:
                         self.frame_idx += 1
 
                 else:
-                    # Only process every n frame of video to save time
-                    if self.frame_idx == self.FRAME_SKIPPING:
-                        self.frame_idx = 0
-                        name, prob, img = self.process_video(self.frame)
-                        if img is not None:
-                            self.app.result_screen.update_info(name, prob, img)
+                    if (self.scan_idx == self.SCAN_TIMEOUT):
+                        self.scan_idx = 0
+                        self.switch_screen("home")
                     else:
-                        self.frame_idx += 1
+                        print("belum timeout ", self.scan_idx, " - ", self.frame_status)
+                        # Only process every n frame of video to save time
+                        if self.frame_idx == self.FRAME_SKIPPING:
+                            self.frame_idx = 0
+                            name, prob, img = self.process_video(self.frame)
+                            if img is not None:
+                                self.app.result_screen.update_info(name, prob, img)
+                        else:
+                            self.frame_idx += 1
+                        
+                        self.scan_idx += 1
 
                 self.display_video()
                 
