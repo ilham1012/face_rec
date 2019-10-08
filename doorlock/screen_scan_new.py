@@ -3,6 +3,7 @@ import threading
 from PIL import Image
 from PIL import ImageTk
 import tkinter as tk
+import tkinter.ttk as ttk
 import imutils
 from imutils.video import VideoStream
 import cv2
@@ -30,13 +31,17 @@ class ScanNewScreen(tk.Frame):
         self.thread = None
         self.stopEvent = None
         self.app = app
-        self.rf = RegisterFace(users_df)
+        self.rf = RegisterFace(users_df)        
+        self.sub_up_txt = tk.StringVar()
 
         self.panel = tk.Label(self)
         self.panel.place(relx=0.5, rely=0, anchor=tk.N)
 
-        label = tk.Label(self, text="Page Two", font=LARGE_FONT)
-        label.place()
+        label = ttk.Label(self, text="Scan Face", style='Title.TLabel')
+        label.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
+
+        self.sub_up = ttk.Label(self, textvariable=self.sub_up_txt, style='Subtitle.TLabel')
+        self.sub_up.place(relx=0.5, rely=0.15, anchor=tk.CENTER)
 
         button1 = tk.Button(self, text="Back to Home",
                             command=lambda: self.switch_screen("home"))
@@ -55,6 +60,8 @@ class ScanNewScreen(tk.Frame):
         self.app.show_frame(screen)
         
     def video_loop(self):
+        # From https://www.pyimagesearch.com/2016/05/30/displaying-a-video-feed-with-opencv-and-tkinter/
+        #
         # DISCLAIMER:
         # I'm not a GUI developer, nor do I even pretend to be. This
         # try/except statement is a pretty ugly hack to get around
@@ -113,6 +120,7 @@ class ScanNewScreen(tk.Frame):
         image = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
         image = Image.fromarray(image)
         image = ImageTk.PhotoImage(image)
+        self.scan_status()
 
         # if the panel is not None, we need to initialize it
         if self.panel is None:
@@ -141,3 +149,8 @@ class ScanNewScreen(tk.Frame):
                 self.frame_idx = 0
                 self.frame_status = 'post'
                 self.app.scan_screen.fr.load_model()
+
+    def scan_status(self):
+        progress = len(self.rf.face_encodings) / self.rf.NEW_DATA * 100
+        prog_txt = "Perekaman: " + '{0:.2f}'.format(progress) + "%"
+        self.sub_up_txt.set(prog_txt)
