@@ -10,6 +10,7 @@ import cv2
 
 from doorlock.constants import LARGE_FONT, MEDIUM_FONT, ASSETS_URL
 from doorlock.styles import colors
+from doorlock.textbox import TextBox
 
 
 class RegistrationScreen(tk.Frame):
@@ -44,10 +45,10 @@ class RegistrationScreen(tk.Frame):
         fullname_lbl = tk.Label(form_container, text="Nama Lengkap", background=colors['white'])
         password_lbl = tk.Label(form_container, text="Password", background=colors['white'])
         password_conf_lbl = tk.Label(form_container, text="Ulangi Password", background=colors['white'])
-        self.username_form = ttk.Entry(form_container, font=('Arial', 12), width=40)
-        self.fullname_form = ttk.Entry(form_container, font=('Arial', 12), width=40)
-        self.password_form = ttk.Entry(form_container, show="*", font=('Arial', 12), width=40)
-        self.password_conf_form = ttk.Entry(form_container, show="*", font=('Arial', 12), width=40)
+        self.username_form = TextBox(form_container, font=('Arial', 12), width=40)
+        self.fullname_form = TextBox(form_container, font=('Arial', 12), width=40)
+        self.password_form = TextBox(form_container, show="*", font=('Arial', 12), width=40)
+        self.password_conf_form = TextBox(form_container, show="*", font=('Arial', 12), width=40)
         
         username_lbl.pack(padx=20, pady=(20, 0), anchor=tk.SW)
         self.username_form.pack(padx=20, pady=0)
