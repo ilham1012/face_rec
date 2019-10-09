@@ -102,6 +102,7 @@ class ScanScreen(tk.Frame):
                             self.frame_idx = 0
                             name, prob, img = self.process_video(self.frame)
                             if img is not None:
+                                self.scan_idx = 0
                                 self.app.result_screen.update_info(name, prob, img)
                         else:
                             self.frame_idx += 1
@@ -117,6 +118,8 @@ class ScanScreen(tk.Frame):
         # set the stop event, cleanup the camera, and allow the rest of
         # the quit process to continue
         self.n = 0
+        self.scan_idx = 0
+        self.frame_idx = 0
         print("[INFO] closing...")
         self.stop_event.set()
         print("[INFO] stop event set...")
