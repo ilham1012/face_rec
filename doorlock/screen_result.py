@@ -1,4 +1,6 @@
 import time
+from datetime import datetime
+import json
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -6,6 +8,7 @@ from PIL import Image
 from PIL import ImageTk
 import cv2
 # import RPi.GPIO as GPIO
+from firebase import firebase
 
 from doorlock.constants import ASSETS_URL
 from doorlock.styles import colors
@@ -17,9 +20,6 @@ class ResultScreen(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         self['bg'] = colors['navy']
-
-#        self.GPIO_init()
-
         self.title_up_txt = tk.StringVar()
         self.title_down_txt = tk.StringVar()
         self.sub_up_txt = tk.StringVar()
@@ -38,37 +38,31 @@ class ResultScreen(tk.Frame):
         self.panel = tk.Label(self, bd=0, highlightthickness=0)
         self.panel.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-        # home_btn = ttk.Button(self, text="Back to Home", width=31,
-        #                     command=lambda: app.show_frame("home"))
-                            
-        # home_btn.pack(padx=20, pady=10)
-
         self.app = app
+        self.fb = firebase.FirebaseApplication('https://lab-iit.firebaseio.com/', None)
 
     def show_screen(self):
         print("[SHOW SCREEN] Result")
-#         if (self.name != "unknown"):
-            # self.GPIO_init()
-            # try:
-            #     print("GPIO.HIGH")
-            #     self.app.GPIO.output(self.output_pin, self.app.GPIO.HIGH)
-            #     print("Sleep")
-            #     time.sleep(2)
-            #     print("GPIO.LOW")
-            #     self.app.GPIO.output(self.output_pin, self.app.GPIO.LOW)
-            # finally:
-            #     GPIO.cleanup()
-        # else:
 
         if (self.name != "unknown"):
-            self.app.GPIO.output(self.output_pin, 1)        
+            # self.app.GPIO.output(self.output_pin, 1)        
             time.sleep(3)
-            self.app.GPIO.output(self.output_pin, 0)
+            # self.app.GPIO.output(self.output_pin, 0)
+            self.log_opener()
         else:
             time.sleep(2)
 
         self.reset()
         self.app.show_frame("home")
+
+    def log_opener(self):
+        dtime = datetime.now()
+        dtime_str = dtime.strftime("%d/%m/%Y, %H:%M:%S")
+
+        rec_str = '{"username": "'+ self.name +'", "datetime": "' + dtime_str + '" }'
+        rec_json = json.loads(rec_str)
+        result = self.fb.post('/test1/pintu/logs', rec_json)
+        print(result)
 
     def reset(self):
         self.name = ""
@@ -81,7 +75,6 @@ class ResultScreen(tk.Frame):
     def update_info(self, name, prob=0, img=[], mode=0):
         self.name = name
         self.prob = prob
-        # self.img = img
 
         if (name == "unknown"):
             txt_title_up = "Maaf Anda Tidak Terdaftar"
@@ -120,9 +113,3 @@ class ResultScreen(tk.Frame):
         image = ImageTk.PhotoImage(image)
         self.panel.configure(image=image)
         self.panel.image = image
-       
-
-    def GPIO_init(self):
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(self.output_pin, GPIO.OUT, initial=GPIO.LOW)
-        pass
