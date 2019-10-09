@@ -45,9 +45,9 @@ class ResultScreen(tk.Frame):
         print("[SHOW SCREEN] Result")
 
         if (self.name != "unknown"):
-            # self.app.GPIO.output(self.output_pin, 1)        
+            self.app.GPIO.output(self.output_pin, 1)        
             time.sleep(3)
-            # self.app.GPIO.output(self.output_pin, 0)
+            self.app.GPIO.output(self.output_pin, 0)
             self.log_opener()
         else:
             time.sleep(2)
