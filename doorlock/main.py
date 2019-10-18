@@ -102,8 +102,11 @@ class App(tk.Tk):
 
     def GPIO_init(self):
         GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.buzzer_pin, GPIO.OUT, initial=GPIO.HIGH)
+        GPIO.setup(self.buzzer_pin, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.output_pin, GPIO.OUT, initial=GPIO.LOW)
+        # init fallback
+        self.app.GPIO.output(self.buzzer_pin, 0)
+        self.app.GPIO.output(self.output_pin, 0)
         # pass
 
 

@@ -4,7 +4,6 @@ import time
 import tkinter as tk
 import tkinter.ttk as ttk
 from PIL import Image, ImageTk
-# import RPi.GPIO as GPIO
 
 from doorlock.constants import LARGE_FONT, MEDIUM_FONT, ASSETS_URL
 from doorlock.styles import colors
@@ -56,33 +55,40 @@ class HomeScreen(tk.Frame):
 
     def ring_the_bell(self):
         print("[BELL] RIIIIING!")
+        # MODE 1: Speaker
         # sound_file = ASSETS_URL + 'sounds/doorbell.mp3'
         # system("mpg123 " + sound_file)
         
-#        i = 0
-#        pitch = [82, 0, 65]
-#        duration = [1, 0.1, 2]
+        # MODE 2: Buzzer w/ notes
+        # i = 0
+        # pitch = [82, 0, 65]
+        # duration = [1, 0.1, 2]
 
-#        for p in pitch:
-#            self.buzzer(p, duration[i])
-#            time.sleep(duration[i] * 0.5)
-#            i+=1
+        # for p in pitch:
+        #     self.buzzer(p, duration[i])
+        #     time.sleep(duration[i] * 0.5)
+        #     i+=1
 
-        self.app.GPIO.output(self.buzzer_pin, 0)
+        # MODE 3: Simple Buzzer
+        self.app.GPIO.output(self.buzzer_pin, 1)
         time.sleep(0.4)
-        self.app.GPIO.output(self.buzzer_pin, 1)
-        time.sleep(0.1)
         self.app.GPIO.output(self.buzzer_pin, 0)
-        time.sleep(0.1)
+        time.sleep(0.05)
         self.app.GPIO.output(self.buzzer_pin, 1)
-        time.sleep(0.1)
+        time.sleep(0.05)
         self.app.GPIO.output(self.buzzer_pin, 0)
-        time.sleep(0.1)
+        time.sleep(0.05)
         self.app.GPIO.output(self.buzzer_pin, 1)
-        time.sleep(0.1)
+        time.sleep(0.05)
         self.app.GPIO.output(self.buzzer_pin, 0)
+        time.sleep(0.05)
+        self.app.GPIO.output(self.buzzer_pin, 1)
+        time.sleep(0.05)
+        self.app.GPIO.output(self.buzzer_pin, 0)
+        time.sleep(0.05)
+        self.app.GPIO.output(self.buzzer_pin, 1)
         time.sleep(0.4)
-        self.app.GPIO.output(self.buzzer_pin, 1)
+        self.app.GPIO.output(self.buzzer_pin, 0)
         
 
     buzzer_pin = 18
@@ -97,13 +103,8 @@ class HomeScreen(tk.Frame):
         delay=period/2
         cycles=int(duration*pitch)
 
-        for i in range(cycles):
-            self.app.GPIO.output(self.buzzer_pin,1)
-            time.sleep(delay)
-            self.app.GPIO.output(self.buzzer_pin,0)
-            time.sleep(delay)
-
-    def GPIO_init(self):
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(self.buzzer_pin, GPIO.OUT, initial=0)
-        pass
+        # for i in range(cycles):
+        #     self.app.GPIO.output(self.buzzer_pin,1)
+        #     time.sleep(delay)
+        #     self.app.GPIO.output(self.buzzer_pin,0)
+        #     time.sleep(delay)

@@ -7,8 +7,6 @@ class TextBox(ttk.Entry):
         super().__init__(master, widget, **kw)
         self.bind('<FocusIn>', self.focus_in)
         self.bind('<FocusOut>', self.focus_out)
-        
-
 
     def focus_out(self, event):
         print("[TextBox] Focus Out")
