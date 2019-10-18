@@ -45,9 +45,13 @@ class ResultScreen(tk.Frame):
         print("[SHOW SCREEN] Result")
 
         if (self.name != "unknown"):
-            self.app.GPIO.output(self.output_pin, 1)        
+            # self.app.GPIO.output(self.output_pin, 1)
+            result = self.fb.put_async('/test1/pintu/', 'lock', False) # callback=relock
+            print('unlock:', result)
             time.sleep(3)
-            self.app.GPIO.output(self.output_pin, 0)
+            result = self.fb.put_async('/test1/pintu/', 'lock', True)
+            print('relock:', result)
+            # self.app.GPIO.output(self.output_pin, 0)
             self.log_opener()
         else:
             time.sleep(2)
